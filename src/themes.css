@@ -1,0 +1,65 @@
+/* Theme system shared base.
+   Token values (--bg, --surface, ...) are set per theme/mode by <ThemeProvider/>
+   as inline vars on document.documentElement. --accent, --blur, --opacity come
+   from config.theme via ThemeProvider too; the values below are fallbacks. */
+:root {
+  --accent: #7c5cff;
+  --blur: 16px;
+  --opacity: 0.6;
+  --gap: 12px;
+  --row-height: 80px;
+  --cols: 12;
+}
+
+html, body, #root { height: 100%; margin: 0; }
+
+body {
+  /* When a custom background image is set, ThemeProvider defines --bg-image;
+     otherwise the theme's --bg (gradient or flat color) is used. */
+  background: var(--bg-image, var(--bg));
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background 0.5s ease, color 0.3s ease;
+}
+
+/* Dim overlay over custom background images; --bg-image-dim comes from the
+   active theme so the tint adapts to dark/light mode. */
+body[data-bg]::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-image-dim);
+  pointer-events: none;
+}
+
+.app { min-height: 100%; }
+
+/* --opacity composes with --surface: the surface (color or gradient) is painted
+   on a ::before layer whose opacity is --opacity. This works uniformly for both
+   flat colors and gradients. The card's own background stays transparent so
+   backdrop-filter themes (liquid-glass) still blur the page behind. */
+.card {
+  position: relative;
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.2), box-shadow 0.25s, border-color 0.25s;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--surface);
+  opacity: var(--opacity);
+}
+.card:hover { transform: translateY(-3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
