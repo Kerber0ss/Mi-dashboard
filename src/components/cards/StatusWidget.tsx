@@ -69,7 +69,7 @@ export default function StatusWidget({ item }: { item: Item }) {
               </span>
               <span className="status-label">{targetLabel(target)}</span>
               <span className="status-latency">
-                {state.status === 'pending' ? '…' : state.latencyMs !== null ? `${state.latencyMs}ms` : 'down'}
+                {state.status === 'pending' ? '…' : state.latencyMs !== null ? `${state.latencyMs} мс` : 'недоступен'}
               </span>
             </li>
           )

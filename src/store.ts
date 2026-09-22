@@ -53,10 +53,10 @@ export const useStore = create<State>((set, get) => ({
   save: async () => {
     try {
       const res = await fetch('/api/config', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(get().config) })
-      if (!res.ok) set({ status: 'error', lastError: 'Failed to save configuration' })
+      if (!res.ok) set({ status: 'error', lastError: 'Не удалось сохранить настройки — проверьте соединение и попробуйте снова' })
       else set({ lastError: null })
     } catch {
-      set({ status: 'error', lastError: 'Failed to save configuration' })
+      set({ status: 'error', lastError: 'Не удалось сохранить настройки — проверьте соединение и попробуйте снова' })
     }
   },
   dismissError: () => set({ lastError: null }),

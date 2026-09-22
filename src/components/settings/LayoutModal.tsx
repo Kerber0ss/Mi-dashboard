@@ -9,10 +9,10 @@ export default function LayoutModal({ open, onClose }: { open: boolean; onClose:
   const setGrid = useStore((s) => s.setGrid)
 
   return (
-    <Modal open={open} onClose={onClose} title="Layout">
+    <Modal open={open} onClose={onClose} title="Сетка">
       <div className="field-row">
         <label className="field">
-          <span>Columns (4–24)</span>
+          <span>Колонки (4–24)</span>
           <input
             type="number"
             min={4}
@@ -22,7 +22,7 @@ export default function LayoutModal({ open, onClose }: { open: boolean; onClose:
           />
         </label>
         <label className="field">
-          <span>Row height (40–200)</span>
+          <span>Высота ряда (40–200)</span>
           <input
             type="number"
             min={40}
@@ -32,7 +32,7 @@ export default function LayoutModal({ open, onClose }: { open: boolean; onClose:
           />
         </label>
         <label className="field">
-          <span>Gap (0–48)</span>
+          <span>Отступ (0–48)</span>
           <input
             type="number"
             min={0}

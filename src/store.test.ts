@@ -23,7 +23,7 @@ describe('store', () => {
   it('save failure sets lastError, success clears it', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false })))
     await useStore.getState().save()
-    expect(useStore.getState().lastError).toBe('Failed to save configuration')
+    expect(useStore.getState().lastError).toBe('Не удалось сохранить настройки — проверьте соединение и попробуйте снова')
     expect(useStore.getState().status).toBe('error')
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true })))
     await useStore.getState().save()
@@ -33,7 +33,7 @@ describe('store', () => {
   it('network error during save sets lastError', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('offline') }))
     await useStore.getState().save()
-    expect(useStore.getState().lastError).toBe('Failed to save configuration')
+    expect(useStore.getState().lastError).toBe('Не удалось сохранить настройки — проверьте соединение и попробуйте снова')
     vi.unstubAllGlobals()
   })
 })

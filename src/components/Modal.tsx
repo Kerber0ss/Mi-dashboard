@@ -85,7 +85,7 @@ export default function Modal({ open, onClose, title, children, wide }: ModalPro
           >
             <header className="modal-header">
               <h2 className="modal-title">{title}</h2>
-              <button type="button" className="modal-close" aria-label="Close" onClick={onClose}>
+              <button type="button" className="modal-close" aria-label="Закрыть" onClick={onClose}>
                 ×
               </button>
             </header>

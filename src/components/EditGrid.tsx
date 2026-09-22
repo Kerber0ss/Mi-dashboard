@@ -176,8 +176,8 @@ function EditableCell({ item, grid, containerRef, onEditCard, mobile }: Editable
       <button
         type="button"
         className="cell-remove"
-        title="Remove"
-        aria-label="Remove card"
+        title="Удалить"
+        aria-label="Удалить карточку"
         onPointerDown={(e) => e.stopPropagation()}
         onClick={(e) => {
           e.stopPropagation()
@@ -189,8 +189,8 @@ function EditableCell({ item, grid, containerRef, onEditCard, mobile }: Editable
       {mobile ? null : (
         <div
           className="resize-handle"
-          title="Resize"
-          aria-label="Resize card"
+          title="Изменить размер"
+          aria-label="Изменить размер"
           onPointerDown={startResize}
           onClick={(e) => e.stopPropagation()}
           onPointerMove={(e) => moveHandler.current?.(e)}

@@ -12,10 +12,10 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
   const setTheme = useStore((s) => s.setTheme)
 
   return (
-    <Modal open={open} onClose={onClose} title="Appearance">
+    <Modal open={open} onClose={onClose} title="Оформление">
       <label className="field">
-        <span>Theme</span>
-        <div className="theme-gallery" role="listbox" aria-label="Theme">
+        <span>Тема</span>
+        <div className="theme-gallery" role="listbox" aria-label="Тема">
           {Object.values(THEMES).map((def) => {
             const t = def.tokens[theme.mode] ?? def.tokens.dark
             return (
@@ -49,8 +49,8 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
       </label>
 
       <div className="field">
-        <span>Mode</span>
-        <div className="segmented" role="radiogroup" aria-label="Color mode">
+        <span>Режим</span>
+        <div className="segmented" role="radiogroup" aria-label="Цветовой режим">
           {(['light', 'dark'] as const).map((m) => (
             <button
               key={m}
@@ -60,7 +60,7 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
               className={theme.mode === m ? 'active' : ''}
               onClick={() => setTheme({ mode: m })}
             >
-              {m === 'light' ? '☀️ Light' : '🌙 Dark'}
+              {m === 'light' ? '☀️ Светлая' : '🌙 Тёмная'}
             </button>
           ))}
         </div>
@@ -68,7 +68,7 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
 
       <div className="field-row">
         <label className="field">
-          <span>Accent color</span>
+          <span>Цвет акцента</span>
           <input
             type="color"
             value={theme.accent}
@@ -76,7 +76,7 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
           />
         </label>
         <label className="field">
-          <span>Opacity: {theme.opacity.toFixed(2)}</span>
+          <span>Прозрачность: {theme.opacity.toFixed(2)}</span>
           <input
             type="range"
             min={0}
@@ -87,7 +87,7 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
           />
         </label>
         <label className="field">
-          <span>Blur: {theme.blur}px</span>
+          <span>Размытие: {theme.blur}px</span>
           <input
             type="range"
             min={0}
@@ -100,7 +100,7 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
       </div>
 
       <label className="field">
-        <span>Background image URL</span>
+        <span>Фоновое изображение (URL)</span>
         <div className="field-inline">
           <input
             type="text"
@@ -110,7 +110,7 @@ export default function AppearanceModal({ open, onClose }: { open: boolean; onCl
           />
           {theme.background && (
             <button type="button" className="btn-secondary" onClick={() => setTheme({ background: null })}>
-              Clear
+              Убрать
             </button>
           )}
         </div>

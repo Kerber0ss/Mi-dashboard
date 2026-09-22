@@ -42,18 +42,18 @@ export default function DataModal({ open, onClose }: { open: boolean; onClose: (
   }
 
   const resetConfig = () => {
-    if (!confirm('Reset the dashboard to defaults? All cards will be removed.')) return
+    if (!confirm('Вернуть дашборд к настройкам по умолчанию? Все карточки будут удалены.')) return
     setConfig(defaultConfigClient())
     save()
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Data">
+    <Modal open={open} onClose={onClose} title="Данные">
       <div className="field">
-        <span>Configuration</span>
+        <span>Конфигурация</span>
         <div className="field-inline">
           <button type="button" className="btn-primary" onClick={exportConfig}>
-            ⬇ Export config.json
+            ⬇ Экспорт config.json
           </button>
           <input
             ref={fileInput}
@@ -67,10 +67,10 @@ export default function DataModal({ open, onClose }: { open: boolean; onClose: (
             }}
           />
           <button type="button" className="btn-secondary" onClick={() => fileInput.current?.click()}>
-            ⬆ Import config.json
+            ⬆ Импорт config.json
           </button>
           <button type="button" className="btn-danger" onClick={resetConfig}>
-            Reset to defaults
+            Сбросить всё
           </button>
         </div>
         <p className="field-hint">

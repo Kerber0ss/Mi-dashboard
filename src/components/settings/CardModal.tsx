@@ -72,28 +72,28 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
     patch({ children: [...childIds, id] })
   }
   const typeLabel: Record<string, string> = {
-    link: 'Link card',
-    group: 'Group card',
-    'widget:clock': 'Clock widget',
-    'widget:weather': 'Weather widget',
-    'widget:status': 'Status widget',
+    link: 'Ссылка',
+    group: 'Группа',
+    'widget:clock': 'Часы',
+    'widget:weather': 'Погода',
+    'widget:status': 'Статус сервисов',
   }
 
   return (
     <Modal open onClose={onClose} title={`${typeLabel[item.type] ?? item.type}`} wide>
       <div className="field-row">
         <label className="field">
-          <span>Title</span>
+          <span>Название</span>
           <input
             type="text"
             value={title}
             onChange={(e) => patch({ title: e.target.value })}
-            placeholder="My service"
+            placeholder="Например: Plex"
           />
         </label>
         {(item.type === 'link' || item.type === 'group') && (
           <label className="field">
-            <span>URL</span>
+            <span>Адрес</span>
             <input
               type="text"
               value={url}
@@ -108,7 +108,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
         <div className="field">
           <span>Group children ({childIds.length})</span>
           <div className="group-children">
-            {linkItems.length === 0 && <p className="field-hint">No links yet — add one below.</p>}
+            {linkItems.length === 0 && <p className="field-hint">Ссылок пока нет — создайте их ниже.</p>}
             {linkItems.map((li) => (
               <label key={li.id} className="field-check group-child">
                 <input
@@ -121,7 +121,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
             ))}
           </div>
           <button type="button" className="btn-secondary" onClick={addChildLink}>
-            ＋ New link in group
+            ＋ Новая ссылка в группе
           </button>
         </div>
       )}
@@ -129,7 +129,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
       {item.type === 'widget:weather' && (
         <div className="field-row">
           <label className="field">
-            <span>Latitude (−90…90)</span>
+            <span>Широта (от −90 до 90)</span>
             <input
               type="number"
               step="any"
@@ -142,7 +142,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
             />
           </label>
           <label className="field">
-            <span>Longitude (−180…180)</span>
+            <span>Долгота (от −180 до 180)</span>
             <input
               type="number"
               step="any"
@@ -159,7 +159,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
 
       {item.type === 'widget:status' && (
         <label className="field">
-          <span>Targets (one URL per line)</span>
+          <span>Адреса сервисов — по одному в строке</span>
           <textarea
             rows={5}
             value={((item.props.targets as string[] | undefined) ?? []).join('\n')}
@@ -177,7 +177,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
               checked={(item.props.format24h as boolean | undefined) ?? true}
               onChange={(e) => patch({ format24h: e.target.checked })}
             />
-            <span>24-hour format</span>
+            <span>24-часовой формат</span>
           </label>
           <label className="field field-check">
             <input
@@ -185,7 +185,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
               checked={(item.props.showSeconds as boolean | undefined) ?? false}
               onChange={(e) => patch({ showSeconds: e.target.checked })}
             />
-            <span>Show seconds</span>
+            <span>Показывать секунды</span>
           </label>
         </div>
       )}
@@ -193,7 +193,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
       {!isWidget && (
         <>
           <div className="field">
-            <span>Icon</span>
+            <span>Иконка</span>
             <div className="icon-current">
               <Icon icon={icon} customIcon={customIcon} url={url} title={title} size={48} />
               <div className="icon-current-actions">
@@ -214,7 +214,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
                   disabled={uploading}
                   onClick={() => fileInput.current?.click()}
                 >
-                  {uploading ? 'Uploading…' : '⬆ Upload icon (svg/png)'}
+                  {uploading ? 'Загрузка…' : '⬆ Своё изображение (svg/png)'}
                 </button>
                 {(icon || customIcon) && (
                   <button
@@ -222,7 +222,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
                     className="btn-secondary"
                     onClick={() => patch({ icon: null, customIcon: null })}
                   >
-                    Reset icon
+                    Сбросить иконку
                   </button>
                 )}
               </div>
@@ -231,12 +231,12 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
             <input
               type="text"
               className="icon-search"
-              placeholder="Search icons…"
+              placeholder="Поиск иконок…"
               value={iconQuery}
               onChange={(e) => setIconQuery(e.target.value)}
             />
-            <div className="icon-grid" role="listbox" aria-label="Icon library">
-              {filteredIcons.length === 0 && <span className="icon-grid-empty">No matching icons</span>}
+            <div className="icon-grid" role="listbox" aria-label="Библиотека иконок">
+              {filteredIcons.length === 0 && <span className="icon-grid-empty">Ничего не найдено</span>}
               {filteredIcons.map((name) => (
                 <button
                   key={name}
@@ -257,10 +257,10 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
 
       <div className="modal-footer">
         <button type="button" className="btn-danger" onClick={() => { removeItem(item.id); onClose() }}>
-          Delete card
+          Удалить карточку
         </button>
         <button type="button" className="btn-primary" onClick={onClose}>
-          Done
+          Готово
         </button>
       </div>
     </Modal>

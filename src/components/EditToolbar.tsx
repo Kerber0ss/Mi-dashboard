@@ -12,11 +12,11 @@ interface EditToolbarProps {
 }
 
 const ADD_BUTTONS: Array<[type: string, label: string]> = [
-  ['link', 'Add link'],
-  ['group', 'Add group'],
-  ['widget:clock', 'Add clock'],
-  ['widget:weather', 'Add weather'],
-  ['widget:status', 'Add status'],
+  ['link', 'Ссылка'],
+  ['group', 'Группа'],
+  ['widget:clock', 'Часы'],
+  ['widget:weather', 'Погода'],
+  ['widget:status', 'Статус сервисов'],
 ]
 
 /**
@@ -46,13 +46,13 @@ export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOp
           ))}
           <span className="edit-toolbar-sep" aria-hidden="true" />
           <button type="button" className="edit-toolbar-btn" onClick={onOpenAppearance}>
-            🎨 Appearance
+            🎨 Оформление
           </button>
           <button type="button" className="edit-toolbar-btn" onClick={onOpenLayout}>
-            ▦ Layout
+            ▦ Сетка
           </button>
           <button type="button" className="edit-toolbar-btn" onClick={onOpenData}>
-            💾 Data
+            💾 Данные
           </button>
         </div>
       )}
@@ -63,7 +63,7 @@ export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOp
         aria-pressed={editMode}
         title={editMode ? 'Leave edit mode' : 'Enter edit mode'}
       >
-        {editMode ? '✓ Done' : '✏️ Edit'}
+        {editMode ? '✓ Готово' : '✏️ Редактировать'}
       </button>
     </>
   )
