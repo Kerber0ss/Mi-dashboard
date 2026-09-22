@@ -1,0 +1,16 @@
+node_modules
+dist
+data
+.git
+.github
+.agents
+.claude
+.cursor
+.jevrouter
+.superpowers
+docs
+*.md
+playwright-report
+test-results
+tsconfig.tsbuildinfo
+npm-debug.log*
