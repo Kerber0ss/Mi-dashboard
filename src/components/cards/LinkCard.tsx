@@ -17,6 +17,7 @@ export default function LinkCard({ item, editMode }: LinkCardProps) {
       href={url || undefined}
       target="_blank"
       rel="noreferrer"
+      draggable={editMode ? false : undefined}
       onClick={(e) => {
         if (editMode) e.preventDefault()
       }}

@@ -60,6 +60,97 @@ body[data-bg]::before {
 }
 .card:hover { transform: translateY(-3px); }
 
+/* ---- Edit mode ------------------------------------------------------- */
+
+.edit-toolbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--blur));
+}
+
+.edit-toolbar-btn {
+  border: 1px solid var(--surface-border);
+  background: transparent;
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.edit-toolbar-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.edit-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.edit-toggle.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Dragging cell: lift + shadow, links inert */
+.grid-cell { touch-action: none; }
+.cell-dragging { cursor: grabbing; }
+.cell-dragging .card { box-shadow: 0 12px 32px rgb(0 0 0 / 35%); border-color: var(--accent); }
+.cell-dragging a { pointer-events: none; }
+
+.cell-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--surface-border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+.grid-cell:hover .cell-remove { display: flex; }
+.cell-remove:hover { color: #fff; background: #d33; border-color: #d33; }
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  z-index: 2;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  border-bottom-right-radius: inherit;
+  opacity: 0;
+}
+.grid-cell:hover .resize-handle { opacity: 0.7; }
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
