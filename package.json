@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "server": "tsx server/index.ts",
-    "test": "vitest run",
+    "test": "vitest run --exclude 'tests/e2e/**'",
     "test:e2e": "playwright test"
   },
   "dependencies": {
