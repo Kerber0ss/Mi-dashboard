@@ -9,6 +9,9 @@
   --gap: 12px;
   --row-height: 80px;
   --cols: 12;
+  /* Status widget health-dot state colors (theme-overridable) */
+  --status-up: #22c55e;
+  --status-down: #ef4444;
 }
 
 html, body, #root { height: 100%; margin: 0; }
@@ -362,6 +365,51 @@ button:disabled { opacity: 0.6; cursor: default; }
   align-self: stretch;
   margin: 2px 4px;
   background: var(--surface-border);
+}
+
+/* ---- Status widget health dots --------------------------------------- */
+
+.status-dot-up { color: var(--status-up); }
+.status-dot-down { color: var(--status-down); }
+.status-dot-pending { color: var(--text-dim); }
+
+/* ---- Mobile fallback ---------------------------------------------------
+   Below 768px a fixed 12-column grid cannot fit, so cells degrade to a
+   single full-width static column. DOM order defines stacking (both grids
+   render items sorted by y then x); drag/resize affordances are hidden.
+   Toolbar add buttons and settings modals stay usable. */
+@media (max-width: 768px) {
+  .grid-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    padding: 0 12px;
+    box-sizing: border-box;
+    /* Inline min-height (px, from grid rows) is meaningless when stacked */
+    min-height: 0 !important;
+  }
+  .grid-cell {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    /* Also neutralizes framer-motion / dnd-kit inline transforms: cells must
+       never fly around on touch, even mid-gesture in edit mode. */
+    transform: none !important;
+  }
+  .resize-handle { display: none !important; }
+  /* Hover never happens on touch: keep the remove button visible in edit
+     mode so cards can still be deleted from a phone. */
+  .grid-cell:hover .cell-remove,
+  .edit-grid .cell-remove { display: flex; }
+  .edit-toolbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: calc(100vw - 24px);
+    border-radius: 16px;
+  }
+  .edit-toolbar-sep { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

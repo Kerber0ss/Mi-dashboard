@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { MotionConfig } from 'framer-motion'
 import { useStore } from '../store'
 import GridView from './GridView'
 import EditGrid from './EditGrid'
@@ -26,18 +27,22 @@ export default function Dashboard({ editMode: initialEditMode = false }: { editM
 
   return (
     <div className="app">
-      <EditToolbar
-        editMode={editMode}
-        onToggle={() => setEditMode((v) => !v)}
-        onOpenAppearance={() => setModal({ kind: 'appearance' })}
-        onOpenLayout={() => setModal({ kind: 'layout' })}
-        onOpenData={() => setModal({ kind: 'data' })}
-      />
-      {editMode ? (
-        <EditGrid onEditCard={(id) => setModal({ kind: 'card', id })} />
-      ) : (
-        <GridView items={items} grid={grid} editMode={false} />
-      )}
+      {/* reducedMotion="user": entrance staggers degrade to opacity-only when
+          the OS prefers reduced motion (matches the CSS media query). */}
+      <MotionConfig reducedMotion="user">
+        <EditToolbar
+          editMode={editMode}
+          onToggle={() => setEditMode((v) => !v)}
+          onOpenAppearance={() => setModal({ kind: 'appearance' })}
+          onOpenLayout={() => setModal({ kind: 'layout' })}
+          onOpenData={() => setModal({ kind: 'data' })}
+        />
+        {editMode ? (
+          <EditGrid onEditCard={(id) => setModal({ kind: 'card', id })} />
+        ) : (
+          <GridView items={items} grid={grid} editMode={false} />
+        )}
+      </MotionConfig>
 
       <AppearanceModal open={modal?.kind === 'appearance'} onClose={closeModal} />
       <LayoutModal open={modal?.kind === 'layout'} onClose={closeModal} />

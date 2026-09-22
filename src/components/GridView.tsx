@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { motion } from 'framer-motion'
 import type { DashboardConfig } from '../../server/config.js'
 import LinkCard from './cards/LinkCard'
 import GroupCard from './cards/GroupCard'
@@ -43,16 +44,23 @@ export default function GridView({ items, grid, editMode }: { items: Item[]; gri
   const maxBottom = items.reduce((m, i) => Math.max(m, i.y + i.h), 1)
   const height = (maxBottom - 1) * (grid.rowHeight + grid.gap) + grid.rowHeight
 
+  // DOM order = y then x: irrelevant on desktop (absolute positioning), but it
+  // defines the stacking order of the mobile fallback (static column layout).
+  const ordered = [...items].sort((a, b) => a.y - b.y || a.x - b.x)
+
   return (
     <div className="grid-view" style={{ position: 'relative', minHeight: height }}>
-      {items.map((item) => (
-        <div
+      {ordered.map((item, index) => (
+        <motion.div
           key={item.id}
           className="grid-cell"
           style={{ ...posToStyle(item.x, item.y, item.w, item.h, grid), position: 'absolute' }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut', delay: Math.min(index * 0.03, 0.6) }}
         >
           {renderItem(item, editMode)}
-        </div>
+        </motion.div>
       ))}
     </div>
   )

@@ -61,10 +61,9 @@ export default function StatusWidget({ item }: { item: Item }) {
           return (
             <li key={target} className="status-row">
               <span
-                className="status-dot"
-                style={{
-                  color: state.status === 'pending' ? '#888' : up ? '#22c55e' : '#ef4444',
-                }}
+                className={`status-dot ${
+                  state.status === 'pending' ? 'status-dot-pending' : up ? 'status-dot-up' : 'status-dot-down'
+                }`}
               >
                 ●
               </span>

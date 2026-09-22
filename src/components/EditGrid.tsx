@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { DndContext, PointerSensor, useDraggable, useSensor, useSensors } from '@dnd-kit/core'
 import type { DragEndEvent } from '@dnd-kit/core'
+import { motion } from 'framer-motion'
 import { useStore } from '../store'
 import { posToStyle, renderItem } from './GridView'
 import type { DashboardConfig } from '../../server/config.js'
@@ -64,14 +65,33 @@ export function applyResolvedOverlaps() {
   }
 }
 
+/**
+ * True when the CSS mobile fallback (@media max-width: 768px) is active:
+ * cells are stacked static there, so drag/resize gestures must be disabled
+ * (they would reposition items with no visual feedback). Add buttons and
+ * settings/card modals stay usable.
+ */
+export function useMobileLayout(): boolean {
+  const [mobile, setMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const onChange = () => setMobile(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  return mobile
+}
+
 interface EditableCellProps {
   item: Item
   grid: Grid
   containerRef: React.RefObject<HTMLDivElement | null>
   onEditCard?: (id: string) => void
+  /** Mobile fallback active: drag/resize gestures disabled. */
+  mobile: boolean
 }
 
-function EditableCell({ item, grid, containerRef, onEditCard }: EditableCellProps) {
+function EditableCell({ item, grid, containerRef, onEditCard, mobile }: EditableCellProps) {
   const removeItem = useStore((s) => s.removeItem)
   const resizeItem = useStore((s) => s.resizeItem)
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: item.id })
@@ -141,8 +161,7 @@ function EditableCell({ item, grid, containerRef, onEditCard }: EditableCellProp
       ref={setNodeRef}
       className={`grid-cell${isDragging ? ' cell-dragging' : ''}`}
       style={style}
-      {...listeners}
-      {...attributes}
+      {...(mobile ? {} : { ...listeners, ...attributes })}
       onPointerDownCapture={(e) => {
         downPos.current = { x: e.clientX, y: e.clientY }
       }}
@@ -166,14 +185,16 @@ function EditableCell({ item, grid, containerRef, onEditCard }: EditableCellProp
       >
         ×
       </button>
-      <div
-        className="resize-handle"
-        title="Resize"
-        onPointerDown={startResize}
-        onClick={(e) => e.stopPropagation()}
-        onPointerMove={(e) => moveHandler.current?.(e)}
-        onPointerUp={(e) => { upHandler.current?.(e); moveHandler.current = null; upHandler.current = null }}
-      />
+      {mobile ? null : (
+        <div
+          className="resize-handle"
+          title="Resize"
+          onPointerDown={startResize}
+          onClick={(e) => e.stopPropagation()}
+          onPointerMove={(e) => moveHandler.current?.(e)}
+          onPointerUp={(e) => { upHandler.current?.(e); moveHandler.current = null; upHandler.current = null }}
+        />
+      )}
     </div>
   )
 }
@@ -201,6 +222,12 @@ export default function EditGrid({ onEditCard }: { onEditCard?: (id: string) => 
     applyResolvedOverlaps()
   }
 
+  /**
+   * Edit-mode UI affordances (drag, resize, remove) are suppressed on the
+   * mobile breakpoint — see useMobileLayout / themes.css mobile fallback.
+   */
+  const mobile = useMobileLayout()
+
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <div
@@ -208,9 +235,23 @@ export default function EditGrid({ onEditCard }: { onEditCard?: (id: string) => 
         className="grid-view edit-grid"
         style={{ position: 'relative', minHeight: height }}
       >
-        {items.map((item) => (
-          <EditableCell key={item.id} item={item} grid={grid} containerRef={containerRef} onEditCard={onEditCard} />
-        ))}
+        {/* Entrance stagger lives on an outer static wrapper: a transform on
+            this wrapper would make it the containing block for the absolutely
+            positioned cell (equal origin here), and once the animation rests
+            framer-motion removes the transform. Keeping it off the cell itself
+            avoids clobbering dnd-kit's inline drag transform. */}
+        {[...items]
+          .sort((a, b) => a.y - b.y || a.x - b.x)
+          .map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut', delay: Math.min(index * 0.03, 0.6) }}
+            >
+              <EditableCell item={item} grid={grid} containerRef={containerRef} onEditCard={onEditCard} mobile={mobile} />
+            </motion.div>
+          ))}
       </div>
     </DndContext>
   )
