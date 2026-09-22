@@ -2,6 +2,9 @@ import type { CSSProperties } from 'react'
 import type { DashboardConfig } from '../../server/config.js'
 import LinkCard from './cards/LinkCard'
 import GroupCard from './cards/GroupCard'
+import ClockWidget from './cards/ClockWidget'
+import WeatherWidget from './cards/WeatherWidget'
+import StatusWidget from './cards/StatusWidget'
 
 type Item = DashboardConfig['items'][number]
 type Grid = DashboardConfig['grid']
@@ -31,6 +34,12 @@ export default function GridView({ items, grid, editMode }: { items: Item[]; gri
             <LinkCard item={item} editMode={editMode} />
           ) : item.type === 'group' ? (
             <GroupCard item={item} editMode={editMode} />
+          ) : item.type === 'widget:clock' ? (
+            <ClockWidget item={item} />
+          ) : item.type === 'widget:weather' ? (
+            <WeatherWidget item={item} />
+          ) : item.type === 'widget:status' ? (
+            <StatusWidget item={item} />
           ) : (
             <div className="card card-widget" data-widget={item.type}>
               <span className="card-title">{item.props.title}</span>
