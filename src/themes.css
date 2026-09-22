@@ -114,6 +114,8 @@ body[data-bg]::before {
 
 /* Dragging cell: lift + shadow, links inert */
 .grid-cell { touch-action: none; }
+.grid-cell > .card,
+.grid-cell > .card-link { width: 100%; height: 100%; box-sizing: border-box; }
 .cell-dragging { cursor: grabbing; }
 .cell-dragging .card { box-shadow: 0 12px 32px rgb(0 0 0 / 35%); border-color: var(--accent); }
 .cell-dragging a { pointer-events: none; }
@@ -374,6 +376,37 @@ button:disabled { opacity: 0.6; cursor: default; }
 
 /* Icon picker */
 .icon-current { display: flex; align-items: center; gap: 12px; }
+
+/* Link card layout: icon + title on one row, content centered.
+   .card-link is an <a> — it must leave inline flow or the icon div
+   fragments its border/background (Task: 'card looks broken'). */
+.card-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: var(--text);
+  overflow: hidden;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.icon {
+  flex: none;
+}
+.icon-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 .icon-current-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .icon-current-actions button { padding: 5px 10px; font-size: 12px; }
 .icon-search { width: 100%; box-sizing: border-box; margin-top: 10px; }

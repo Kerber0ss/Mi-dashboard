@@ -38,6 +38,7 @@ export default function Dashboard({ editMode: initialEditMode = false }: { editM
           onOpenAppearance={() => setModal({ kind: 'appearance' })}
           onOpenLayout={() => setModal({ kind: 'layout' })}
           onOpenData={() => setModal({ kind: 'data' })}
+          onOpenCard={(id) => setModal({ kind: 'card', id })}
         />
         {editMode ? (
           <EditGrid onEditCard={(id) => setModal({ kind: 'card', id })} />

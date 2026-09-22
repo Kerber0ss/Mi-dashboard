@@ -7,6 +7,8 @@ interface EditToolbarProps {
   onOpenAppearance: () => void
   onOpenLayout: () => void
   onOpenData: () => void
+  /** Called after a new item is added so the parent can open its editor */
+  onOpenCard: (id: string) => void
 }
 
 const ADD_BUTTONS: Array<[type: string, label: string]> = [
@@ -23,12 +25,14 @@ const ADD_BUTTONS: Array<[type: string, label: string]> = [
  * visible as a floating corner button. Clicking a card in edit mode opens
  * the card editor (handled by EditGrid → Dashboard).
  */
-export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOpenLayout, onOpenData }: EditToolbarProps) {
+export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOpenLayout, onOpenData, onOpenCard }: EditToolbarProps) {
   const addItem = useStore((s) => s.addItem)
 
   const handleAdd = (type: string) => {
-    addItem(type) // starts at 0,0 — resolve any resulting overlap immediately
+    const id = addItem(type) // starts at 0,0 — resolve any resulting overlap immediately
     applyResolvedOverlaps()
+    // Open the editor right away: a fresh empty card is not obvious to edit.
+    onOpenCard(id)
   }
 
   return (

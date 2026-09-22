@@ -20,6 +20,11 @@ const FOCUSABLE = 'button, input, select, textarea, a[href], [tabindex]:not([tab
 export default function Modal({ open, onClose, title, children, wide }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null)
   const lastFocus = useRef<HTMLElement | null>(null)
+  // Keep onClose in a ref so the effect below depends only on `open` —
+  // parents recreate the callback every render, and re-running this effect
+  // would steal focus from inputs inside the modal on every keystroke.
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
   useEffect(() => {
     if (!open) return
@@ -29,7 +34,7 @@ export default function Modal({ open, onClose, title, children, wide }: ModalPro
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation()
-        onClose()
+        onCloseRef.current()
         return
       }
       if (e.key === 'Tab') {
@@ -52,7 +57,7 @@ export default function Modal({ open, onClose, title, children, wide }: ModalPro
       document.removeEventListener('keydown', onKey)
       lastFocus.current?.focus()
     }
-  }, [open, onClose])
+  }, [open])
 
   return (
     <AnimatePresence>
