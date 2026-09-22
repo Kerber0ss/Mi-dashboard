@@ -19,7 +19,7 @@ docker run -d \
   --name mi-dashboard \
   -p 3000:3000 \
   -v mi-data:/app/data \
-  ghcr.io/miroslavbibik/mi-dashboard:latest
+  ghcr.io/kerber0ss/mi-dashboard:latest
 ```
 
 Then open <http://localhost:3000>. Set up your links, groups, theme and widgets in the in-app settings (WebUI) — changes are saved automatically.
