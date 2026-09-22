@@ -1,0 +1,8 @@
+- generic [ref=e3]:
+  - button "✏️ Edit" [active] [ref=e169] [cursor=pointer]
+  - generic [ref=e170]:
+    - generic [ref=e171]: •
+    - link "Plex Media Plex Media" [ref=e175] [cursor=pointer]:
+      - /url: https://plex.tv
+      - img "Plex Media" [ref=e176]
+      - generic [ref=e177]: Plex Media
