@@ -4,6 +4,9 @@ import { applyResolvedOverlaps } from './EditGrid'
 interface EditToolbarProps {
   editMode: boolean
   onToggle: () => void
+  onOpenAppearance: () => void
+  onOpenLayout: () => void
+  onOpenData: () => void
 }
 
 const ADD_BUTTONS: Array<[type: string, label: string]> = [
@@ -15,11 +18,12 @@ const ADD_BUTTONS: Array<[type: string, label: string]> = [
 ]
 
 /**
- * Edit-mode UI. Add-buttons are visible only in edit mode (card settings
- * modals come with the settings task); the edit-mode toggle is always
- * visible as a floating corner button.
+ * Edit-mode UI. Add-buttons plus settings buttons (Appearance / Layout /
+ * Data) are visible only in edit mode; the edit-mode toggle is always
+ * visible as a floating corner button. Clicking a card in edit mode opens
+ * the card editor (handled by EditGrid → Dashboard).
  */
-export default function EditToolbar({ editMode, onToggle }: EditToolbarProps) {
+export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOpenLayout, onOpenData }: EditToolbarProps) {
   const addItem = useStore((s) => s.addItem)
 
   const handleAdd = (type: string) => {
@@ -36,6 +40,16 @@ export default function EditToolbar({ editMode, onToggle }: EditToolbarProps) {
               {label}
             </button>
           ))}
+          <span className="edit-toolbar-sep" aria-hidden="true" />
+          <button type="button" className="edit-toolbar-btn" onClick={onOpenAppearance}>
+            🎨 Appearance
+          </button>
+          <button type="button" className="edit-toolbar-btn" onClick={onOpenLayout}>
+            ▦ Layout
+          </button>
+          <button type="button" className="edit-toolbar-btn" onClick={onOpenData}>
+            💾 Data
+          </button>
         </div>
       )}
       <button

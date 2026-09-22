@@ -68,15 +68,19 @@ interface EditableCellProps {
   item: Item
   grid: Grid
   containerRef: React.RefObject<HTMLDivElement | null>
+  onEditCard?: (id: string) => void
 }
 
-function EditableCell({ item, grid, containerRef }: EditableCellProps) {
+function EditableCell({ item, grid, containerRef, onEditCard }: EditableCellProps) {
   const removeItem = useStore((s) => s.removeItem)
   const resizeItem = useStore((s) => s.resizeItem)
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: item.id })
   // Live resize preview (committed to the store on pointerup)
   const [preview, setPreview] = useState<{ w: number; h: number } | null>(null)
   const previewRef = useRef<{ w: number; h: number } | null>(null)
+  // Click-vs-drag discrimination: a pointerdown→click with < 6px movement
+  // (same threshold as the PointerSensor) opens the card editor.
+  const downPos = useRef<{ x: number; y: number } | null>(null)
   // Live handlers for the active resize gesture (set by startResize, driven by
   // pointer capture on the handle element).
   const moveHandler = useRef<((ev: ReactPointerEvent<HTMLDivElement>) => void) | null>(null)
@@ -139,6 +143,15 @@ function EditableCell({ item, grid, containerRef }: EditableCellProps) {
       style={style}
       {...listeners}
       {...attributes}
+      onPointerDownCapture={(e) => {
+        downPos.current = { x: e.clientX, y: e.clientY }
+      }}
+      onClick={(e) => {
+        const down = downPos.current
+        if (onEditCard && down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6) {
+          onEditCard(item.id)
+        }
+      }}
     >
       {renderItem(item, true)}
       <button
@@ -146,7 +159,10 @@ function EditableCell({ item, grid, containerRef }: EditableCellProps) {
         className="cell-remove"
         title="Remove"
         onPointerDown={(e) => e.stopPropagation()}
-        onClick={() => removeItem(item.id)}
+        onClick={(e) => {
+          e.stopPropagation()
+          removeItem(item.id)
+        }}
       >
         ×
       </button>
@@ -154,6 +170,7 @@ function EditableCell({ item, grid, containerRef }: EditableCellProps) {
         className="resize-handle"
         title="Resize"
         onPointerDown={startResize}
+        onClick={(e) => e.stopPropagation()}
         onPointerMove={(e) => moveHandler.current?.(e)}
         onPointerUp={(e) => { upHandler.current?.(e); moveHandler.current = null; upHandler.current = null }}
       />
@@ -162,7 +179,7 @@ function EditableCell({ item, grid, containerRef }: EditableCellProps) {
 }
 
 /** Edit-mode grid: dnd-kit DndContext + draggable/resizable cells. */
-export default function EditGrid() {
+export default function EditGrid({ onEditCard }: { onEditCard?: (id: string) => void }) {
   const items = useStore((s) => s.config.items)
   const grid = useStore((s) => s.config.grid)
   const moveItem = useStore((s) => s.moveItem)
@@ -192,7 +209,7 @@ export default function EditGrid() {
         style={{ position: 'relative', minHeight: height }}
       >
         {items.map((item) => (
-          <EditableCell key={item.id} item={item} grid={grid} containerRef={containerRef} />
+          <EditableCell key={item.id} item={item} grid={grid} containerRef={containerRef} onEditCard={onEditCard} />
         ))}
       </div>
     </DndContext>
