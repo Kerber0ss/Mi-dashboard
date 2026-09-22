@@ -3,3 +3,14 @@ dist/
 data/
 test-results/
 tsconfig.tsbuildinfo
+
+# local agent/tooling config — not part of the project
+.agents/
+.claude/
+.cursor/
+.cursorrules
+.jevrouter/
+.superpowers/
+AGENTS.md
+CLAUDE.md
+docs/
