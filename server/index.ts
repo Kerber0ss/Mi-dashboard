@@ -3,6 +3,7 @@ import { pathToFileURL } from 'node:url'
 import { mkdirSync, existsSync, createReadStream, writeFileSync, readdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { loadConfig, saveConfig, dashboardConfigSchema } from './config.js'
+import { resolvePublicHttpUrl } from './urlGuard.js'
 import multipart from '@fastify/multipart'
 import fastifyStatic from '@fastify/static'
 import { nanoid } from 'nanoid'
@@ -49,17 +50,40 @@ export function buildApp(opts: string | BuildAppOptions = {}) {
     return { files }
   })
 
-  // GET /api/health?url= — HEAD-probe a URL, report up/down + latency
+  // GET /api/health?url= — HEAD-probe a URL, report up/down + latency.
+  // SSRF-safe: scheme is restricted to http/https, DNS resolution is checked
+  // against private/loopback/link-local ranges, and redirects are followed
+  // manually (max 3 hops) so every hop is re-validated.
+  const MAX_REDIRECTS = 3
   app.get('/api/health', async (req, reply) => {
     const { url } = req.query as { url?: string }
     if (!url) return reply.code(400).send({ error: 'url required' })
     const start = Date.now()
+    let target: URL
     try {
-      const ctrl = new AbortController()
-      const t = setTimeout(() => ctrl.abort(), 5000)
-      await fetch(url, { method: 'HEAD', signal: ctrl.signal, redirect: 'follow' })
-      clearTimeout(t)
-      return { status: 'up', latencyMs: Date.now() - start }
+      target = await resolvePublicHttpUrl(url)
+    } catch {
+      return { status: 'down', latencyMs: Date.now() - start }
+    }
+    try {
+      let current = target
+      for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+        const ctrl = new AbortController()
+        const t = setTimeout(() => ctrl.abort(), 5000)
+        try {
+          const res = await fetch(current, { method: 'HEAD', signal: ctrl.signal, redirect: 'manual' })
+          if (res.status < 300 || res.status >= 400) return { status: 'up', latencyMs: Date.now() - start }
+          const loc = res.headers.get('location')
+          if (!loc) return { status: 'up', latencyMs: Date.now() - start }
+          const next = new URL(loc, current)
+          if (next.protocol !== 'http:' && next.protocol !== 'https:') throw new Error('redirect scheme not allowed')
+          const nextValidated = await resolvePublicHttpUrl(next.toString())
+          current = nextValidated
+        } finally {
+          clearTimeout(t)
+        }
+      }
+      throw new Error('too many redirects')
     } catch {
       return { status: 'down', latencyMs: Date.now() - start }
     }

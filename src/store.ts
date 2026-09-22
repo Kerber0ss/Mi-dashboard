@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 type State = {
   config: DashboardConfig
   status: 'loading' | 'ready' | 'error'
+  lastError: string | null
   setConfig: (c: DashboardConfig) => void
   setTheme: (patch: Partial<DashboardConfig['theme']>) => void
   setGrid: (patch: Partial<DashboardConfig['grid']>) => void
@@ -15,6 +16,7 @@ type State = {
   removeItem: (id: string) => void
   reload: () => Promise<void>
   save: () => Promise<void>
+  dismissError: () => void
 }
 let saveTimer: ReturnType<typeof setTimeout> | undefined
 const scheduleSave = (get: () => State) => {
@@ -29,7 +31,7 @@ const mutate = (set: any, get: () => State, fn: (c: DashboardConfig) => void) =>
 }
 export const defaultConfigClient = (): DashboardConfig => ({ version: 1, theme: { id: 'liquid-glass', mode: 'dark', accent: '#7c5cff', opacity: 0.6, blur: 16, background: null }, grid: { cols: 12, rowHeight: 80, gap: 12 }, items: [] })
 export const useStore = create<State>((set, get) => ({
-  config: defaultConfigClient(), status: 'loading',
+  config: defaultConfigClient(), status: 'loading', lastError: null,
   setConfig: (c) => set({ config: c, status: 'ready' }),
   setTheme: (patch) => mutate(set, get, (c) => Object.assign(c.theme, patch)),
   setGrid: (patch) => mutate(set, get, (c) => Object.assign(c.grid, patch)),
@@ -49,7 +51,13 @@ export const useStore = create<State>((set, get) => ({
     } catch { set({ status: 'error' }) }
   },
   save: async () => {
-    const res = await fetch('/api/config', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(get().config) })
-    if (!res.ok) set({ status: 'error' })
+    try {
+      const res = await fetch('/api/config', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(get().config) })
+      if (!res.ok) set({ status: 'error', lastError: 'Failed to save configuration' })
+      else set({ lastError: null })
+    } catch {
+      set({ status: 'error', lastError: 'Failed to save configuration' })
+    }
   },
+  dismissError: () => set({ lastError: null }),
 }))

@@ -18,8 +18,10 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(ma
  */
 export default function CardModal({ itemId, onClose }: { itemId: string; onClose: () => void }) {
   const item = useStore((s) => s.config.items.find((i) => i.id === itemId))
+  const items = useStore((s) => s.config.items)
   const updateItem = useStore((s) => s.updateItem)
   const removeItem = useStore((s) => s.removeItem)
+  const addItem = useStore((s) => s.addItem)
 
   const [iconQuery, setIconQuery] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -58,6 +60,17 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
   }
 
   const isWidget = item.type.startsWith('widget:')
+  const childIds = item.type === 'group' ? ((item.props.children as string[] | undefined) ?? []) : []
+  const linkItems = items.filter((i) => i.type === 'link')
+  const toggleChild = (id: string) => {
+    patch({
+      children: childIds.includes(id) ? childIds.filter((c) => c !== id) : [...childIds, id],
+    })
+  }
+  const addChildLink = () => {
+    const id = addItem('link', { title: 'New link' })
+    patch({ children: [...childIds, id] })
+  }
   const typeLabel: Record<string, string> = {
     link: 'Link card',
     group: 'Group card',
@@ -90,6 +103,28 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
           </label>
         )}
       </div>
+
+      {item.type === 'group' && (
+        <div className="field">
+          <span>Group children ({childIds.length})</span>
+          <div className="group-children">
+            {linkItems.length === 0 && <p className="field-hint">No links yet — add one below.</p>}
+            {linkItems.map((li) => (
+              <label key={li.id} className="field-check group-child">
+                <input
+                  type="checkbox"
+                  checked={childIds.includes(li.id)}
+                  onChange={() => toggleChild(li.id)}
+                />
+                <span>{li.props.title || li.props.url || li.id}</span>
+              </label>
+            ))}
+          </div>
+          <button type="button" className="btn-secondary" onClick={addChildLink}>
+            ＋ New link in group
+          </button>
+        </div>
+      )}
 
       {item.type === 'widget:weather' && (
         <div className="field-row">

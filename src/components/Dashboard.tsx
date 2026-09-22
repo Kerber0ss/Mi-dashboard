@@ -21,6 +21,8 @@ export default function Dashboard({ editMode: initialEditMode = false }: { editM
   const [modal, setModal] = useState<ModalState>(null)
   const items = useStore((s) => s.config.items)
   const grid = useStore((s) => s.config.grid)
+  const lastError = useStore((s) => s.lastError)
+  const dismissError = useStore((s) => s.dismissError)
 
   const closeModal = () => setModal(null)
   const cardItem = modal?.kind === 'card' ? items.find((i) => i.id === modal.id) : undefined
@@ -43,6 +45,15 @@ export default function Dashboard({ editMode: initialEditMode = false }: { editM
           <GridView items={items} grid={grid} editMode={false} />
         )}
       </MotionConfig>
+
+      {lastError && (
+        <div className="error-banner" role="alert">
+          <span>{lastError}</span>
+          <button type="button" className="error-banner-close" onClick={dismissError} aria-label="Dismiss error">
+            ×
+          </button>
+        </div>
+      )}
 
       <AppearanceModal open={modal?.kind === 'appearance'} onClose={closeModal} />
       <LayoutModal open={modal?.kind === 'layout'} onClose={closeModal} />
