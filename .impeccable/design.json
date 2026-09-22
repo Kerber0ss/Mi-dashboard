@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-22T15:00:00Z",
+  "title": "Design System: Mi Dashboard",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Imperial Violet", "canonical": "#7c5cff", "tonalRamp": ["#1a1030", "#2e1d55", "#46287a", "#5e3aa0", "#7c5cff", "#9d82ff", "#bfa9ff", "#e3daff"] },
+      "status-up": { "role": "status", "displayName": "Up Green", "canonical": "#22c55e", "tonalRamp": ["#0b2e17", "#14522a", "#1d7a3d", "#22c55e", "#5dd98a", "#8ee6ab", "#c0f2d1", "#e6fbeb"] },
+      "status-down": { "role": "status", "displayName": "Down Red", "canonical": "#ef4444", "tonalRamp": ["#3d1212", "#6b1d1d", "#a52c2c", "#ef4444", "#f47c7c", "#f8a5a5", "#fbd0d0", "#fdeaea"] },
+      "glass-dark-surface": { "role": "neutral", "displayName": "Smoke Glass", "canonical": "rgba(255,255,255,.08)", "tonalRamp": ["#0a0f1e", "#101828", "#1c2436", "#2c3550", "#485373", "#6b7694", "#98a2bd", "#c8d0e2"] },
+      "glass-light-surface": { "role": "neutral", "displayName": "Frost Paper", "canonical": "rgba(255,255,255,.45)", "tonalRamp": ["#a8bed4", "#cfe0f2", "#e2ecf7", "#eef4fb", "#f6fafd", "#ffffff", "#ffffff", "#ffffff"] }
+    },
+    "typographyMeta": {
+      "title": { "displayName": "Card Title", "purpose": "Service names on cards — the only emphasized text." },
+      "body": { "displayName": "Body", "purpose": "Card content and widget values." },
+      "label": { "displayName": "Label", "purpose": "Settings labels, secondary text." }
+    },
+    "shadows": [
+      { "name": "rest", "value": "var(--shadow)", "purpose": "Theme-owned delicate diffuse shadow at rest; glass does the depth work." },
+      { "name": "drag", "value": "0 12px 32px rgb(0 0 0 / 35%)", "purpose": "Only while dragging a card; paired with accent border." },
+      { "name": "hover-lift", "value": "translateY(-3px) + shadow intensification", "purpose": "The tide: response to cursor." }
+    ],
+    "motion": [
+      { "name": "ease-spring", "value": "cubic-bezier(0.2, 0.8, 0.2, 1.2)", "purpose": "Hover/drag spring with overshoot." },
+      { "name": "duration-state", "value": "250ms", "purpose": "State transitions (transform, shadow, border)." },
+      { "name": "duration-theme", "value": "500ms", "purpose": "Background/color theme switch, wrapped in View Transitions API." },
+      { "name": "entrance-stagger", "value": "30ms per card, capped at 600ms", "purpose": "Cards fade-rise in on load." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Link Card",
+      "kind": "card",
+      "refersTo": "card-link",
+      "description": "Glass panel with 32px auto-icon + service title; the system's signature component.",
+      "html": "<a class=\"ds-card-link\" href=\"#\"><span class=\"ds-icon-fallback\">P</span><span class=\"ds-card-title\">Plex Media</span></a>",
+      "css": ".ds-card-link { display: flex; align-items: center; gap: 12px; padding: 14px 16px; box-sizing: border-box; text-decoration: none; color: var(--text, #f5f7fb); background: var(--surface, rgba(255,255,255,.08)); border: 1px solid var(--surface-border, rgba(255,255,255,.18)); border-radius: var(--radius-base, 20px); box-shadow: var(--shadow, 0 8px 32px rgba(0,0,0,.4)); backdrop-filter: blur(var(--blur,16px)) saturate(1.6); transition: transform .25s cubic-bezier(.2,.8,.2,1.2), box-shadow .25s, border-color .25s; } .ds-card-link:hover { transform: translateY(-3px); border-color: var(--accent, #7c5cff); } .ds-icon-fallback { flex: none; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, var(--accent,#7c5cff), color-mix(in srgb, var(--accent,#7c5cff) 45%, #000)); } .ds-card-title { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }"
+    },
+    {
+      "name": "Toolbar Button",
+      "kind": "button",
+      "refersTo": "button-toolbar",
+      "description": "Pill glass button of the edit-mode toolbar.",
+      "html": "<button class=\"ds-btn-toolbar\">Add link</button>",
+      "css": ".ds-btn-toolbar { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--surface-border, rgba(255,255,255,.18)); background: var(--surface, rgba(255,255,255,.08)); color: var(--text, #f5f7fb); font: 500 13px system-ui, sans-serif; cursor: pointer; transition: border-color .25s, transform .25s cubic-bezier(.2,.8,.2,1.2); } .ds-btn-toolbar:hover { border-color: var(--accent,#7c5cff); transform: translateY(-1px); } .ds-btn-toolbar:focus-visible { outline: 2px solid var(--accent,#7c5cff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-modal",
+      "description": "Modal text field, glass surface with accent focus.",
+      "html": "<input class=\"ds-input\" placeholder=\"My service\" />",
+      "css": ".ds-input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: var(--radius-base,12px); border: 1px solid var(--surface-border, rgba(255,255,255,.18)); background: var(--surface, rgba(255,255,255,.08)); color: var(--text, #f5f7fb); font: 400 14px system-ui, sans-serif; } .ds-input:focus { outline: none; border-color: var(--accent,#7c5cff); }"
+    },
+    {
+      "name": "Status Dot",
+      "kind": "custom",
+      "refersTo": "status-dot",
+      "description": "Service status indicator; the only place status colors appear.",
+      "html": "<span class=\"ds-dot ds-dot-up\"></span>",
+      "css": ".ds-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; } .ds-dot-up { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,.6); } .ds-dot-down { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,.6); }"
+    },
+    {
+      "name": "Modal Shell",
+      "kind": "custom",
+      "refersTo": "modal",
+      "description": "Settings dialog: slightly larger radius than cards, blur backdrop.",
+      "html": "<div class=\"ds-modal\"><h2>Settings</h2><p>Glass panel dialog.</p></div>",
+      "css": ".ds-modal { border-radius: calc(var(--radius-base, 20px) + 4px); background: var(--surface, rgba(255,255,255,.08)); border: 1px solid var(--surface-border, rgba(255,255,255,.18)); box-shadow: var(--shadow, 0 8px 32px rgba(0,0,0,.4)); backdrop-filter: blur(var(--blur,16px)) saturate(1.4); padding: 24px; color: var(--text, #f5f7fb); font: 400 14px system-ui, sans-serif; } .ds-modal h2 { font-size: 17px; font-weight: 600; margin: 0 0 16px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "«Витрина из жидкого стекла»",
+    "overview": "Дашборд — это витрина: тёмное помещение, свет за матовым стеклом, объекты парят на разной глубине. Карточки — стеклянные панели с настоящей оптикой (backdrop-blur + saturate), а не серые плашки. Темы — смена материала витрины, не перекраска. Depth comes from light behind glass; motion only as a response to user action.",
+    "keyCharacteristics": ["Depth from light behind glass, not black shadows", "Accent is scarce and precious (≤10% of any screen)", "Hover is a tide: lift + glow, spring easing with overshoot", "Motion only as a response to user action", "Everything visible is user-configurable"],
+    "rules": [
+      { "name": "The Precious Accent Rule", "body": "Акцент встречается только на active-состояниях, drag-подсветке, фокусе, буквах-фолбэках. Если акцент виден больше чем на ~10% экрана — ошибка.", "section": "colors" },
+      { "name": "The Tide Rule", "body": "Движение — только как ответ: hover, drag, смена темы, появление карточек. Ничто не анимируется само по себе.", "section": "elevation" }
+    ],
+    "dos": ["Держать акцент редким: active, drag, focus, статусные точки", "Задавать глубину светом и blur, а не толстыми тенями", "Использовать spring-easing cubic-bezier(0.2, 0.8, 0.2, 1.2) для hover/drag", "Уважать prefers-reduced-motion"],
+    "donts": ["Вводить новые хардкодные цвета — всё через токены", "Анимировать без причины: никакого idle-движения", "Использовать чёрные непрозрачные поверхности", "Фиксировать радиусы/цвета в компонентах — только var() токены"]
+  }
+}
