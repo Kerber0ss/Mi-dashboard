@@ -584,7 +584,7 @@ button:disabled { opacity: 0.6; cursor: default; }
     right: 12px;
     min-height: 44px;
   }
-  .noc-header-side { margin-right: 0; padding-right: 0; }
+  .noc-header-side { margin-right: 130px; }
   body { padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
   /* Telemetry header stacks, never clips */
   .noc-header { flex-wrap: wrap; gap: 8px 16px; padding: 20px 140px 14px 16px; }
