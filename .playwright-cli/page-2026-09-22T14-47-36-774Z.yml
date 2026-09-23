@@ -1,3 +1,0 @@
-- generic [ref=e3]:
-  - button "✏️ Edit" [ref=e4] [cursor=pointer]
-  - generic [ref=e5]: •
