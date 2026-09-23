@@ -17,9 +17,9 @@ const host = (url: string) => {
 /* NOC-блок: LED живого состояния (общий health-стор), крупное имя, хост моноширинкой. */
 export default function LinkCard({ item, editMode }: LinkCardProps) {
   const { title, url, icon, customIcon } = item.props as LinkProps
-  const led = useHealth(url, !editMode)
+  const health = useHealth(url, !editMode)
 
-  const ledClass = led === 'up' ? 'led-up' : led === 'down' ? 'led-down' : 'led-warn'
+  const ledClass = health.state === 'up' ? 'led-up' : health.state === 'down' ? 'led-down' : 'led-warn'
   return (
     <a
       className="card card-link"

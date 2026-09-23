@@ -65,7 +65,8 @@ export default function WeatherWidget({ item }: { item: Item }) {
 
   return (
     <div className="card card-widget" data-widget="widget:weather">
-      {state.kind === 'loading' && <span className="widget-placeholder">loading…</span>}
+      {title ? <span className="card-title">{title}</span> : null}
+      {state.kind === 'loading' && <span className="widget-placeholder">Загрузка…</span>}
       {state.kind === 'error' && <span className="widget-error" role="alert">⚠ {state.message}</span>}
       {state.kind === 'ready' && (
         <>
@@ -88,7 +89,6 @@ export default function WeatherWidget({ item }: { item: Item }) {
               </li>
             ))}
           </ul>
-          {title ? <span className="card-title">{title}</span> : null}
         </>
       )}
     </div>

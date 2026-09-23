@@ -3,25 +3,32 @@ import { useEffect, useState } from 'react'
 /* Общий реестр health-проб: один таймер на URL, карточки только подписаны.
    Не зависит от ре-маунтов карточек при тикающем телеметрийном часах. */
 export type HealthState = 'pending' | 'up' | 'down'
+export type Health = { state: HealthState; latencyMs: number | null }
 
-const cache = new Map<string, HealthState>()
+const cache = new Map<string, Health>()
 const timers = new Map<string, ReturnType<typeof setInterval>>()
-const listeners = new Map<string, Set<(s: HealthState) => void>>()
+const listeners = new Map<string, Set<(s: Health) => void>>()
 
 function probe(url: string) {
+  const start = performance.now()
   fetch(`/api/health?url=${encodeURIComponent(url)}`)
     .then((r) => r.json())
-    .then((d: { status?: string }) => set(url, d.status === 'up' ? 'up' : 'down'))
-    .catch(() => set(url, 'down'))
+    .then((d: { status?: string; latencyMs?: number }) =>
+      set(url, {
+        state: d.status === 'up' ? 'up' : 'down',
+        latencyMs: typeof d.latencyMs === 'number' ? d.latencyMs : Math.round(performance.now() - start),
+      }),
+    )
+    .catch(() => set(url, { state: 'down', latencyMs: null }))
 }
 
-function set(url: string, s: HealthState) {
+function set(url: string, s: Health) {
   cache.set(url, s)
   listeners.get(url)?.forEach((fn) => fn(s))
 }
 
-function subscribe(url: string, fn: (s: HealthState) => void): () => void {
-  if (!cache.has(url)) cache.set(url, 'pending')
+function subscribe(url: string, fn: (s: Health) => void): () => void {
+  if (!cache.has(url)) cache.set(url, { state: 'pending', latencyMs: null })
   if (!timers.has(url)) {
     probe(url)
     timers.set(url, setInterval(() => probe(url), 60_000))
@@ -34,11 +41,11 @@ function subscribe(url: string, fn: (s: HealthState) => void): () => void {
   }
 }
 
-export function useHealth(url: string, enabled: boolean): HealthState {
-  const [state, setState] = useState<HealthState>(() => (url && enabled ? cache.get(url) ?? 'pending' : 'pending'))
+export function useHealth(url: string, enabled: boolean): Health {
+  const [state, setState] = useState<Health>(() => ({ state: 'pending', latencyMs: null }))
   useEffect(() => {
-    if (!url || !enabled) { setState('pending'); return }
+    if (!url || !enabled) { setState({ state: 'pending', latencyMs: null }); return }
     return subscribe(url, setState)
   }, [url, enabled])
-  return url && enabled ? state : 'pending'
+  return url && enabled ? state : { state: 'pending', latencyMs: null }
 }
