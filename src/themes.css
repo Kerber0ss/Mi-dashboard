@@ -453,7 +453,39 @@ button:disabled { opacity: 0.6; cursor: default; }
    single full-width static column. DOM order defines stacking (both grids
    render items sorted by y then x); drag/resize affordances are hidden.
    Toolbar add buttons and settings modals stay usable. */
+/* Touch & safe-area (mobile-first-class goal): hover never gates functionality,
+   touch targets stay ≥44px, notch insets respected. */
+@media (hover: hover) {
+  .card:hover { transform: translateY(-3px); }
+}
+@media (hover: none) {
+  .card:active { transform: scale(.97); border-color: var(--accent); }
+}
+
 @media (max-width: 768px) {
+  /* Thumb reach: toolbar becomes a bottom bar; edit-toggle sits above it. */
+  .edit-toolbar {
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: 12px;
+    right: 12px;
+    transform: none;
+    /* One swipeable strip instead of 3 wrapped rows eating the screen */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    scrollbar-width: none;
+    border-radius: 16px;
+  }
+  .edit-toolbar::-webkit-scrollbar { display: none; }
+  .edit-toolbar button { min-height: 44px; flex: none; }
+  .edit-toggle {
+    bottom: auto;
+    top: calc(12px + env(safe-area-inset-top));
+    right: 12px;
+    min-height: 44px;
+  }
+  body { padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
   .grid-view {
     display: flex;
     flex-direction: column;
@@ -462,6 +494,7 @@ button:disabled { opacity: 0.6; cursor: default; }
     box-sizing: border-box;
     /* Inline min-height (px, from grid rows) is meaningless when stacked */
     min-height: 0 !important;
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
   }
   .grid-cell {
     position: static !important;
@@ -478,13 +511,22 @@ button:disabled { opacity: 0.6; cursor: default; }
      mode so cards can still be deleted from a phone. */
   .grid-cell:hover .cell-remove,
   .edit-grid .cell-remove { display: flex; }
-  .edit-toolbar {
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: calc(100vw - 24px);
-    border-radius: 16px;
-  }
   .edit-toolbar-sep { display: none; }
+  /* Bottom sheet: full width, anchored low, in thumb reach */
+  .modal-overlay { align-items: flex-end; padding: 0; justify-content: stretch; }
+  .modal-panel { width: 100%; }
+  .modal-panel {
+    width: 100%;
+    max-height: 86vh;
+    border-radius: calc(var(--radius-base) + 4px) calc(var(--radius-base) + 4px) 0 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  .modal-close { width: 44px; height: 44px; }
+  /* 16px prevents iOS Safari zoom-on-focus */
+  .modal-panel input[type='text'],
+  .modal-panel input[type='number'],
+  .modal-panel textarea { font-size: 16px; }
+  .cell-remove { width: 32px; height: 32px; top: 6px; right: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

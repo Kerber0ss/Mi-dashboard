@@ -1,0 +1,14 @@
+- generic [ref=e3]:
+  - button "✏️ Редактировать" [ref=e4] [cursor=pointer]
+  - generic [ref=e5]:
+    - generic [ref=e6]: •
+    - generic [ref=e9]: •
+    - generic [ref=e13]:
+      - generic [ref=e14]: P
+      - generic [ref=e15]: Plex
+    - generic [ref=e17]:
+      - generic [ref=e18]: P
+      - generic [ref=e19]: Plex
+    - generic [ref=e21]:
+      - generic [ref=e22]: P
+      - generic [ref=e23]: Plex
