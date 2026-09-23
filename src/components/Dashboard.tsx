@@ -61,13 +61,20 @@ export default function Dashboard({ editMode: initialEditMode = false }: { editM
           <span>{date}</span>
           <span className="noc-theme-label">{themeName}</span>
         </span>
+        <button
+          type="button"
+          className={`edit-toggle${editMode ? ' active' : ''}`}
+          onClick={() => setEditMode((v) => !v)}
+          aria-pressed={editMode}
+        >
+          {editMode ? 'Готово' : 'Редактировать'}
+        </button>
       </header>
       {/* reducedMotion="user": entrance staggers degrade to opacity-only when
           the OS prefers reduced motion (matches the CSS media query). */}
       <MotionConfig reducedMotion="user">
         <EditToolbar
           editMode={editMode}
-          onToggle={() => setEditMode((v) => !v)}
           onOpenAppearance={() => setModal({ kind: 'appearance' })}
           onOpenLayout={() => setModal({ kind: 'layout' })}
           onOpenData={() => setModal({ kind: 'data' })}

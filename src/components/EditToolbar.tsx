@@ -3,7 +3,6 @@ import { applyResolvedOverlaps } from './EditGrid'
 
 interface EditToolbarProps {
   editMode: boolean
-  onToggle: () => void
   onOpenAppearance: () => void
   onOpenLayout: () => void
   onOpenData: () => void
@@ -25,7 +24,7 @@ const ADD_BUTTONS: Array<[type: string, label: string]> = [
  * visible as a floating corner button. Clicking a card in edit mode opens
  * the card editor (handled by EditGrid → Dashboard).
  */
-export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOpenLayout, onOpenData, onOpenCard }: EditToolbarProps) {
+export default function EditToolbar({ editMode, onOpenAppearance, onOpenLayout, onOpenData, onOpenCard }: EditToolbarProps) {
   const addItem = useStore((s) => s.addItem)
 
   const handleAdd = (type: string) => {
@@ -56,15 +55,6 @@ export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOp
           </button>
         </div>
       )}
-      <button
-        type="button"
-        className={`edit-toggle${editMode ? ' active' : ''}`}
-        onClick={onToggle}
-        aria-pressed={editMode}
-        title={editMode ? 'Leave edit mode' : 'Enter edit mode'}
-      >
-        {editMode ? 'Готово' : 'Редактировать'}
-      </button>
     </>
   )
 }
