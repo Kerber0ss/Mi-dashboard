@@ -1,159 +1,143 @@
 ---
 name: Mi Dashboard
-description: Self-hosted link dashboard dressed as a liquid-glass showcase
+description: Self-hosted link dashboard as a night-operations monitoring board
 colors:
-  primary: "#7c5cff"
-  status-up: "#22c55e"
-  status-down: "#ef4444"
-  glass-dark-bg: "linear-gradient(150deg,#0a0f1e,#101828 50%,#0a1020)"
-  glass-dark-surface: "rgba(255,255,255,.08)"
-  glass-dark-border: "rgba(255,255,255,.18)"
-  glass-dark-text: "#f5f7fb"
-  glass-dark-text-dim: "#9aa7bd"
-  glass-light-bg: "linear-gradient(150deg,#cfe0f2,#eef4fb 50%,#e2ecf7)"
-  glass-light-surface: "rgba(255,255,255,.45)"
-  glass-light-border: "rgba(255,255,255,.6)"
-  glass-light-text: "#182234"
-  glass-light-text-dim: "#5a6b85"
+  primary: "#38c8ff"
+  led-up: "#2ee6a8"
+  led-down: "#ff5c5c"
+  led-warn: "#ffb454"
+  ground-dark: "#0b0e11"
+  ground-light: "#eef1f4"
+  surface-dark: "#12151a"
+  surface-light: "#ffffff"
+  hairline: "#23282e"
+  hairline-strong: "#3a414a"
+  text-dark-mode: "#e8ecef"
+  text-dim: "#8b949e"
 typography:
+  display:
+    fontFamily: "system-ui, -apple-system, sans-serif"
+    fontSize: "clamp(32px, 4.5vw, 56px)"
+    fontWeight: 600
+    letterSpacing: "-0.02em"
+  label:
+    fontFamily: "system-ui, -apple-system, sans-serif"
+    fontSize: "11px"
+    fontWeight: 500
+    letterSpacing: "0.08em"
   body:
     fontFamily: "system-ui, -apple-system, sans-serif"
     fontSize: "15px"
     fontWeight: 400
-  title:
-    fontFamily: "system-ui, -apple-system, sans-serif"
-    fontSize: "15px"
-    fontWeight: 600
-  label:
-    fontFamily: "system-ui, -apple-system, sans-serif"
-    fontSize: "12px"
-    fontWeight: 500
+  mono:
+    fontFamily: "'SF Mono', ui-monospace, Menlo, Consolas, monospace"
+    fontSize: "13px"
+    fontWeight: 400
+    fontFeature: "tabular-nums"
 rounded:
-  sm: "8px"
-  md: "12px"
-  lg: "20px"
-  pill: "999px"
+  sm: "2px"
+  md: "6px"
 spacing:
-  xs: "4px"
   sm: "8px"
   md: "12px"
   lg: "16px"
+  xl: "32px"
 components:
   card-link:
-    backgroundColor: "{colors.glass-dark-surface}"
-    textColor: "{colors.glass-dark-text}"
-    rounded: "{rounded.lg}"
-    padding: "14px 16px"
-  button-toolbar:
-    backgroundColor: "{colors.glass-dark-surface}"
-    textColor: "{colors.glass-dark-text}"
-    rounded: "{rounded.pill}"
-  input-modal:
-    backgroundColor: "{colors.glass-dark-surface}"
-    textColor: "{colors.glass-dark-text}"
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.text-dark}"
     rounded: "{rounded.md}"
+    padding: "16px 18px"
+  telemetry-header:
+    backgroundColor: "{colors.ground-dark}"
+    textColor: "{colors.text-dark}"
+    padding: "28px 32px 20px"
 ---
 
 # Design System: Mi Dashboard
 
 ## Overview
 
-**Creative North Star: «Витрина из жидкого стекла»**
+**Creative North Star: «Экран дежурного инженера» (NOC-статусборд)**
 
-Дашборд — это витрина: тёмное помещение, свет за матовым стеклом, объекты парят на разной глубине. Карточки не «боксы», а стеклянные панели с настоящей оптикой — backdrop-blur с saturate даёт эффект стекла, а не серой плашки. Темы — не перекраска, а смена материала витрины: liquid glass меняет преломление, web 2.0 — глянец, web 3.0 — неон на тёмном металле, minimal — матовое стекло. Пользователь меняет материал одним кликом, система обязана выглядеть целостно в любом.
-
-Плотность рабочая, не витринная: дашборд используется ежедневно, воздух есть, но контент первичен. Accent (#7c5cff по умолчанию, переназначаемый пользователем) — драгоценный цвет: он редок и потому заметен.
+Дашборд — стена мониторинга сетевого центра, не витрина. Главный контент — состояние сервисов крупной типографикой; всё остальное — телеметрия по краям. Глубина живёт в контрасте и плотности, не в тенях: матовый почти-чёрный грунт, плоские блоки, волосяные линии 1px. Движение — только ответ на действие; редактирование — «режим обслуживания», где плата не мигает сама.
 
 **Key Characteristics:**
-- Depth comes from light behind glass (backdrop-filter blur + saturate), not from black shadows
-- Accent is scarce and therefore precious (≤10% of any screen)
-- Hover is a tide: lift + glow, spring easing with overshoot (cubic-bezier(0.2, 0.8, 0.2, 1.2))
-- Motion only as a response to user action (hover, drag, theme switch) — never ambient
-- Everything visible is user-configurable (accent, opacity, blur, background, radius per theme)
+- Flat matte blocks on near-black ground; depth = contrast, never shadows
+- LED status language is constant across themes (#2ee6a8 up / #ff5c5c down / #ffb454 warn)
+- Every number is monospace tabular (clock, latency, forecasts)
+- Label tier: 11px uppercase dim caps; content tier: large, bright
+- Accent is a rare signal color (default #38c8ff): focus, drag, active only
 
 ## Colors
 
-Палитра — не фиксированные hex, а контракт токенов: каждая тема определяет свой набор для dark и light режима. Канонический пример — liquid glass.
+Тёмный приборный грунт; единственный насыщенный акцент — сигнальный.
 
 ### Primary
-- **Imperial Violet** (#7c5cff): accent — пользовательски переназначаемый. Фокус-кольца, активная тема, свечение hover, точки статуса «up», буквы-фолбэки иконок. Единственный насыщенный цвет системы.
+- **Signal Cyan** (#38c8ff, пользовательски переназначаемый): drag-эскалация, фокус, активная тема. Редкость = ценность.
+
+### Status (constant)
+- **LED Up** (#2ee6a8) / **LED Down** (#ff5c5c) / **LED Warn** (#ffb454): только индикация здоровья сервисов; warn также — состояние «проверяется» и drag-эскалация.
 
 ### Neutral
-- **Smoke Glass** (rgba(255,255,255,.08) dark / rgba(255,255,255,.45) light): поверхность карточек — стекло, а не краска
-- **Frost Line** (rgba(255,255,255,.18) / .6): границы — полутон стекла, всегда светлее поверхности
-- **Moonlight Text** (#f5f7fb dark / #182234 light): основной текст
-- **Dim Moonlight** (#9aa7bd dark / #5a6b85 light): вторичный текст, подписи
-
-### Status
-- **Up Green** (#22c55e) / **Down Red** (#ef4444): только точки статуса сервисов, никогда — декор
+- **Board Black** (#0b0e11 / #eef1f4 light): грунт платы
+- **Panel** (#12151a / #ffffff): поверхность блока
+- **Hairline** (#23282e / #d6dce2): 1px разделители — вся глубина системы
+- **Moonlight** (#e8ecef dark / #171a1e light): текст; **Dim** (#8b949e / #5d6670): метки, hosts
 
 ### Named Rules
-**The Precious Accent Rule.** Акцент встречается только на: active-состояниях, drag-подсветке, фокусе, буквах-фолбэках. Если акцент виден больше чем на ~10% экрана — ошибка.
+**The Instrument Rule.** Любая цифра — monospace tabular. Пропорциональные цифры в телеметрии — ошибка.
 
 ## Typography
 
-**Body Font:** system-ui stack (system-ui, -apple-system, sans-serif)
+**Body Font:** system-ui stack · **Digits:** SF Mono / ui-monospace
 
-**Character:** системный шрифт — осознанный выбор self-hosted-инструмента: ноль внешних загрузок, нативный для каждой платформы, «интерфейс как часть ОС».
+**Character:** нативный системный гротеск для меток, моноширинный приборный шрифт для всех чисел — как на настоящем NOC-табло.
 
 ### Hierarchy
-- **Title** (600, 15px): названия сервисов на карточках — единственный выделенный текст
-- **Body** (400, 15px): контент карточек, значения виджетов
-- **Label** (500, 12px): подписи настроек, вторичный текст, время в статусах
+- **Display** (600, clamp 32–56px, tabular): телеметрийные часы в шапке — самый крупный элемент
+- **Content** (600, 18px): имена сервисов
+- **Label** (500, 11px, 0.08em tracking, uppercase): метки виджетов, кнопки
+- **Data** (400, mono, tabular): hosts, мс, прогнозы, статусы
 
 ## Layout
 
-12-колоночная сетка, высота ряда 80px, гэп 12px (все три значения — пользовательские настройки). Карточки позиционируются абсолютно по процентам колонок. Контейнер — весь вьюпорт, без max-width: дашборд заполняет экран. Плотность задаёт пользователь через rowHeight/gap.
-
-Responsive: ниже 768px сетка растворяется — карточки становятся статичными колонками в порядке y-then-x, drag/resize отключаются.
+12-колоночная сетка (rowHeight 96 по умолчанию, гэп 12 — настраиваемо). Полоса телеметрии во всю ширину сверху. Контент — без max-width. Мобильный (<768px): одна колонка, модалки — bottom sheet, тулбар — нижний скролл-стрип, safe-area отступы.
 
 ## Elevation & Depth
 
-**Глубина от света за стеклом, не от черноты.** Тени деликатные (var(--shadow) — рассеянные 8–32px с низкой альфой), главную работу делает backdrop-filter: blur + saturate на стеклянных темах. Тень — вспомогательный сигнал, стекло — основной.
-
-### Shadow Vocabulary
-- **Rest** (`var(--shadow)`): слабая рассеянная тень в покое, принадлежит теме
-- **Drag** (`0 12px 32px rgb(0 0 0 / 35%)` + accent-бордер): только во время перетаскивания
-- **Hover lift** (`translateY(-3px)` + усиление тени): ответ на курсор
-
-### Named Rules
-**The Tide Rule.** Движение — только как ответ: hover, drag, смена темы (View Transition), появление карточек (stagger). Ничто не анимируется само по себе.
+**Плоскость — доктрина.** Тени нет (box-shadow: none во всех темах). Глубина = контраст грунт/панель + 1px хайрлайны. Исключение: LED-свечение (8px halo) — это свет прибора, не тень.
 
 ## Shapes
 
-Радиус — фирменный признак материала: 8px (minimal) → 12px (web 2.0) → 16px (web 3.0) → 20px (liquid glass), задаётся токеном --radius-base и меняется темой. Пилюли (999px) — для статусов и тумблеров. Границы тонкие (1px) полупрозрачные — «шлифованный край» стекла. Модалки: радиус base+4px, чуть крупнее карточек.
+Радиусы малые приборные: 2px (day/patrol) — 6px (night/alert). Пилюли исчезли. Углы — прямые, границы 1px, сетка читается как разметка платы.
 
 ## Components
 
-### Cards / Containers
-- **Corner Style:** var(--radius-base) (8–20px по теме)
-- **Background:** var(--surface) — цвет ИЛИ градиент, с --opacity поверх
-- **Shadow Strategy:** см. Elevation — деликатная в покое
-- **Border:** 1px var(--surface-border)
-- **Internal Padding:** 14–16px
+### Status Block (link card — signature)
+- **LED** 10px + halo: up/down/pending(warn); в edit-режиме — неактивный (обслуживание)
+- **Name** 18px/600 + **host** mono 11.5px dim
+- **Hover:** граница к hairline-strong; на тач — accent
+- **Drag (signature «эскалация»):** warn-рамка + мигание LED + соседи приглушаются до 40%
 
-### Link Card (signature)
-- **Shape:** flex-строка: иконка 32×32 + заголовок 15px/600
-- **Icon:** авто-каскад favicon → CDN-библиотека → буква на accent-градиенте
-- **Hover:** подъём + усиление границы к accent
+### Telemetry Header
+- mono clock clamp(32–56px) слева; дата, температура, имя темы справа; волосяная линия снизу
 
-### Inputs / Fields
-- **Style:** поверхность темнее карточки, radius 8–12px, тонкая граница
-- **Focus:** border-color к accent
+### Widgets
+- Метка 11px caps сверху (всегда рендерится, даже в loading), контент крупный tabular
 
-### Navigation (Edit Toolbar)
-- Пилюльные кнопки, edit-режим: стеклянная панель поверх сетки; edit-toggle плавающий в углу, всегда доступен
+### Edit Toolbar
+- Телеметрическая строка: плоская, на всю ширину, caps-кнопки, разделители 1px
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** держать акцент редким: active, drag, focus, статусные точки
-- **Do** задавать глубину светом и blur, а не толстыми тенями
-- **Do** использовать spring-easing `cubic-bezier(0.2, 0.8, 0.2, 1.2)` для hover/drag
-- **Do** уважать `prefers-reduced-motion` — отключать все переходы
+- **Do** держать LED-цвета константными во всех темах
+- **Do** использовать mono tabular для любых цифр
+- **Do** уважать reduced-motion (все переходы отключаются)
 
 ### Don't:
-- **Don't** вводить новые хардкодные цвета — всё через токены (`--surface`, `--accent`, …), иначе пользовательские темы сломаются
-- **Don't** анимировать без причины: никакого idle-движения, лупов, «живых фонов»
-- **Don't** использовать чёрные непрозрачные поверхности — стекло это alpha поверх градиента
-- **Don't** фиксировать радиусы/цвета в компонентах — только var() токены, которые меняются темой
+- **Don't** возвращать тени/градиенты/стекло — мир плоский
+- **Don't** использовать эмодзи как иконки интерфейса
+- **Don't** прятать метки виджетов в loading-состоянии
+- **Don't** давать акценту больше ~10% экрана

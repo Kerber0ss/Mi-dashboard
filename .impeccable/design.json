@@ -1,86 +1,201 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-22T15:00:00Z",
+  "generatedAt": "2026-09-23T09:45:00Z",
   "title": "Design System: Mi Dashboard",
   "extensions": {
     "colorMeta": {
-      "primary": { "role": "primary", "displayName": "Imperial Violet", "canonical": "#7c5cff", "tonalRamp": ["#1a1030", "#2e1d55", "#46287a", "#5e3aa0", "#7c5cff", "#9d82ff", "#bfa9ff", "#e3daff"] },
-      "status-up": { "role": "status", "displayName": "Up Green", "canonical": "#22c55e", "tonalRamp": ["#0b2e17", "#14522a", "#1d7a3d", "#22c55e", "#5dd98a", "#8ee6ab", "#c0f2d1", "#e6fbeb"] },
-      "status-down": { "role": "status", "displayName": "Down Red", "canonical": "#ef4444", "tonalRamp": ["#3d1212", "#6b1d1d", "#a52c2c", "#ef4444", "#f47c7c", "#f8a5a5", "#fbd0d0", "#fdeaea"] },
-      "glass-dark-surface": { "role": "neutral", "displayName": "Smoke Glass", "canonical": "rgba(255,255,255,.08)", "tonalRamp": ["#0a0f1e", "#101828", "#1c2436", "#2c3550", "#485373", "#6b7694", "#98a2bd", "#c8d0e2"] },
-      "glass-light-surface": { "role": "neutral", "displayName": "Frost Paper", "canonical": "rgba(255,255,255,.45)", "tonalRamp": ["#a8bed4", "#cfe0f2", "#e2ecf7", "#eef4fb", "#f6fafd", "#ffffff", "#ffffff", "#ffffff"] }
+      "primary": {
+        "role": "primary",
+        "displayName": "Signal Cyan",
+        "canonical": "#38c8ff",
+        "tonalRamp": [
+          "#081c26",
+          "#0c3348",
+          "#115a7a",
+          "#1890ab",
+          "#38c8ff",
+          "#6fdcff",
+          "#9fe8ff",
+          "#d4f6ff"
+        ]
+      },
+      "led-up": {
+        "role": "status",
+        "displayName": "LED Up",
+        "canonical": "#2ee6a8",
+        "tonalRamp": [
+          "#0b2e1f",
+          "#145c3e",
+          "#1d8a5c",
+          "#2ee6a8",
+          "#66f0c2",
+          "#8ff0d2",
+          "#b8f6de",
+          "#e2fdf0"
+        ]
+      },
+      "led-down": {
+        "role": "status",
+        "displayName": "LED Down",
+        "canonical": "#ff5c5c",
+        "tonalRamp": [
+          "#3d1212",
+          "#6b1d1d",
+          "#a52c2c",
+          "#ff5c5c",
+          "#ff8a8a",
+          "#ffb0b0",
+          "#ffd2d2",
+          "#feeaea"
+        ]
+      },
+      "led-warn": {
+        "role": "status",
+        "displayName": "LED Warn",
+        "canonical": "#ffb454",
+        "tonalRamp": [
+          "#3d2a12",
+          "#6b4a1d",
+          "#a5732c",
+          "#ffb454",
+          "#ffc98a",
+          "#ffdbb0",
+          "#ffedd0",
+          "#fff6ea"
+        ]
+      },
+      "ground-dark": {
+        "role": "neutral",
+        "displayName": "Board Black",
+        "canonical": "#0b0e11",
+        "tonalRamp": [
+          "#0b0e11",
+          "#12151a",
+          "#1a1f26",
+          "#242b34",
+          "#384250",
+          "#525f70",
+          "#7d8a9c",
+          "#b6c2cf"
+        ]
+      }
     },
     "typographyMeta": {
-      "title": { "displayName": "Card Title", "purpose": "Service names on cards — the only emphasized text." },
-      "body": { "displayName": "Body", "purpose": "Card content and widget values." },
-      "label": { "displayName": "Label", "purpose": "Settings labels, secondary text." }
+      "title": {
+        "displayName": "Card Title",
+        "purpose": "Service names on cards — the only emphasized text."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Card content and widget values."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Settings labels, secondary text."
+      }
     },
     "shadows": [
-      { "name": "rest", "value": "var(--shadow)", "purpose": "Theme-owned delicate diffuse shadow at rest; glass does the depth work." },
-      { "name": "drag", "value": "0 12px 32px rgb(0 0 0 / 35%)", "purpose": "Only while dragging a card; paired with accent border." },
-      { "name": "hover-lift", "value": "translateY(-3px) + shadow intensification", "purpose": "The tide: response to cursor." }
+      {
+        "name": "none",
+        "value": "none",
+        "purpose": "Flat doctrine: depth is contrast + 1px hairlines. LED 8px halo is instrument light, not shadow."
+      }
     ],
     "motion": [
-      { "name": "ease-spring", "value": "cubic-bezier(0.2, 0.8, 0.2, 1.2)", "purpose": "Hover/drag spring with overshoot." },
-      { "name": "duration-state", "value": "250ms", "purpose": "State transitions (transform, shadow, border)." },
-      { "name": "duration-theme", "value": "500ms", "purpose": "Background/color theme switch, wrapped in View Transitions API." },
-      { "name": "entrance-stagger", "value": "30ms per card, capped at 600ms", "purpose": "Cards fade-rise in on load." }
+      {
+        "name": "ease-state",
+        "value": "0.2s ease",
+        "purpose": "Border/background state transitions."
+      },
+      {
+        "name": "led-blink",
+        "value": "1s ease-in-out infinite",
+        "purpose": "Drag escalation: warn LED blink on the dragged module only."
+      },
+      {
+        "name": "dim-patch",
+        "value": "0.4 opacity on non-dragged cells while patching",
+        "purpose": "Signature interaction."
+      },
+      {
+        "name": "theme-switch",
+        "value": "View Transitions API",
+        "purpose": "Theme change as shift-change."
+      }
     ],
     "breakpoints": [
-      { "name": "mobile", "value": "768px" }
+      {
+        "name": "mobile",
+        "value": "768px"
+      }
     ]
   },
   "components": [
     {
-      "name": "Link Card",
+      "name": "Status Block",
       "kind": "card",
       "refersTo": "card-link",
-      "description": "Glass panel with 32px auto-icon + service title; the system's signature component.",
-      "html": "<a class=\"ds-card-link\" href=\"#\"><span class=\"ds-icon-fallback\">P</span><span class=\"ds-card-title\">Plex Media</span></a>",
-      "css": ".ds-card-link { display: flex; align-items: center; gap: 12px; padding: 14px 16px; box-sizing: border-box; text-decoration: none; color: var(--text, #f5f7fb); background: var(--surface, rgba(255,255,255,.08)); border: 1px solid var(--surface-border, rgba(255,255,255,.18)); border-radius: var(--radius-base, 20px); box-shadow: var(--shadow, 0 8px 32px rgba(0,0,0,.4)); backdrop-filter: blur(var(--blur,16px)) saturate(1.6); transition: transform .25s cubic-bezier(.2,.8,.2,1.2), box-shadow .25s, border-color .25s; } .ds-card-link:hover { transform: translateY(-3px); border-color: var(--accent, #7c5cff); } .ds-icon-fallback { flex: none; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, var(--accent,#7c5cff), color-mix(in srgb, var(--accent,#7c5cff) 45%, #000)); } .ds-card-title { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }"
+      "description": "LED + service name + mono host; the signature component.",
+      "html": "<a class=\"ds-noc-card\" href=\"#\"><span class=\"ds-led ds-led-up\"></span><span class=\"ds-body\"><span class=\"ds-name\">Home Assistant</span><span class=\"ds-host\">ha.local:8123</span></span></a>",
+      "css": ".ds-noc-card { display:flex; align-items:center; gap:14px; padding:16px 18px; background:var(--surface,#12151a); border:1px solid var(--surface-border,#23282e); border-radius:6px; text-decoration:none; color:var(--text,#e8ecef); transition: border-color .2s ease; } .ds-noc-card:hover { border-color: var(--hairline-strong,#3a414a); } .ds-led { width:10px; height:10px; border-radius:50%; flex:none; } .ds-led-up { background:#2ee6a8; box-shadow:0 0 8px rgba(46,230,168,.55); } .ds-body { display:flex; flex-direction:column; gap:3px; min-width:0; flex:1; } .ds-body .ds-name { font: 600 18px/1.15 system-ui, sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-host { font: 400 11.5px 'SF Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; color: var(--text-dim,#8b949e); }"
     },
     {
-      "name": "Toolbar Button",
-      "kind": "button",
-      "refersTo": "button-toolbar",
-      "description": "Pill glass button of the edit-mode toolbar.",
-      "html": "<button class=\"ds-btn-toolbar\">Add link</button>",
-      "css": ".ds-btn-toolbar { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--surface-border, rgba(255,255,255,.18)); background: var(--surface, rgba(255,255,255,.08)); color: var(--text, #f5f7fb); font: 500 13px system-ui, sans-serif; cursor: pointer; transition: border-color .25s, transform .25s cubic-bezier(.2,.8,.2,1.2); } .ds-btn-toolbar:hover { border-color: var(--accent,#7c5cff); transform: translateY(-1px); } .ds-btn-toolbar:focus-visible { outline: 2px solid var(--accent,#7c5cff); outline-offset: 2px; }"
+      "name": "Telemetry Header",
+      "kind": "nav",
+      "refersTo": "telemetry-header",
+      "description": "Full-width strip: big mono clock, date/temp/theme right.",
+      "html": "<header class=\"ds-noc-hdr\"><span class=\"ds-clock\">09:30:05</span><span class=\"ds-side\"><span>среда, 23 сентября</span><span>НОЧНАЯ СМЕНА</span></span></header>",
+      "css": ".ds-noc-hdr { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px 24px; padding:28px 32px 20px; border-bottom:1px solid var(--hairline,#23282e); background:var(--bg,#0b0e11); } .ds-noc-hdr .ds-clock { font: 600 clamp(32px,4.5vw,56px)/1 'SF Mono', ui-monospace, Menlo, monospace; letter-spacing:-0.02em; font-variant-numeric:tabular-nums; color:var(--text,#e8ecef); } .ds-side { display:flex; gap:20px; color:var(--text-dim,#8b949e); font: 400 13px system-ui, sans-serif; font-variant-numeric: tabular-nums; }"
     },
     {
-      "name": "Text Input",
-      "kind": "input",
-      "refersTo": "input-modal",
-      "description": "Modal text field, glass surface with accent focus.",
-      "html": "<input class=\"ds-input\" placeholder=\"My service\" />",
-      "css": ".ds-input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: var(--radius-base,12px); border: 1px solid var(--surface-border, rgba(255,255,255,.18)); background: var(--surface, rgba(255,255,255,.08)); color: var(--text, #f5f7fb); font: 400 14px system-ui, sans-serif; } .ds-input:focus { outline: none; border-color: var(--accent,#7c5cff); }"
+      "name": "Widget Block",
+      "kind": "card",
+      "refersTo": "widget",
+      "description": "Caps label always on top, large tabular content.",
+      "html": "<div class=\"ds-widget\"><span class=\"ds-wlabel\">Часы</span><span class=\"ds-wclock\">09:30:05</span></div>",
+      "css": ".ds-widget { display:flex; flex-direction:column; justify-content:center; gap:6px; padding:14px 18px; overflow:hidden; background:var(--surface,#12151a); border:1px solid var(--surface-border,#23282e); border-radius:6px; } .ds-wlabel { flex:none; font: 500 11px/1 system-ui, sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--text-dim,#8b949e); } .ds-wclock { font: 600 40px/1 'SF Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; color:var(--text,#e8ecef); }"
     },
     {
-      "name": "Status Dot",
-      "kind": "custom",
-      "refersTo": "status-dot",
-      "description": "Service status indicator; the only place status colors appear.",
-      "html": "<span class=\"ds-dot ds-dot-up\"></span>",
-      "css": ".ds-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; } .ds-dot-up { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,.6); } .ds-dot-down { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,.6); }"
-    },
-    {
-      "name": "Modal Shell",
-      "kind": "custom",
-      "refersTo": "modal",
-      "description": "Settings dialog: slightly larger radius than cards, blur backdrop.",
-      "html": "<div class=\"ds-modal\"><h2>Settings</h2><p>Glass panel dialog.</p></div>",
-      "css": ".ds-modal { border-radius: calc(var(--radius-base, 20px) + 4px); background: var(--surface, rgba(255,255,255,.08)); border: 1px solid var(--surface-border, rgba(255,255,255,.18)); box-shadow: var(--shadow, 0 8px 32px rgba(0,0,0,.4)); backdrop-filter: blur(var(--blur,16px)) saturate(1.4); padding: 24px; color: var(--text, #f5f7fb); font: 400 14px system-ui, sans-serif; } .ds-modal h2 { font-size: 17px; font-weight: 600; margin: 0 0 16px; }"
+      "name": "Edit Toolbar",
+      "kind": "nav",
+      "refersTo": "toolbar",
+      "description": "Flat full-width maintenance strip with caps text buttons.",
+      "html": "<nav class=\"ds-tb\"><button>Ссылка</button><button>Оформление</button></nav>",
+      "css": ".ds-tb { display:flex; background:rgba(11,14,17,.88); border-bottom:1px solid var(--hairline,#23282e); } .ds-tb button { border:none; border-left:1px solid var(--hairline,#23282e); background:transparent; color:var(--text-dim,#8b949e); padding:6px 14px; font:500 12px system-ui,sans-serif; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; } .ds-tb button:hover { color:var(--text,#e8ecef); }"
     }
   ],
   "narrative": {
-    "northStar": "«Витрина из жидкого стекла»",
-    "overview": "Дашборд — это витрина: тёмное помещение, свет за матовым стеклом, объекты парят на разной глубине. Карточки — стеклянные панели с настоящей оптикой (backdrop-blur + saturate), а не серые плашки. Темы — смена материала витрины, не перекраска. Depth comes from light behind glass; motion only as a response to user action.",
-    "keyCharacteristics": ["Depth from light behind glass, not black shadows", "Accent is scarce and precious (≤10% of any screen)", "Hover is a tide: lift + glow, spring easing with overshoot", "Motion only as a response to user action", "Everything visible is user-configurable"],
-    "rules": [
-      { "name": "The Precious Accent Rule", "body": "Акцент встречается только на active-состояниях, drag-подсветке, фокусе, буквах-фолбэках. Если акцент виден больше чем на ~10% экрана — ошибка.", "section": "colors" },
-      { "name": "The Tide Rule", "body": "Движение — только как ответ: hover, drag, смена темы, появление карточек. Ничто не анимируется само по себе.", "section": "elevation" }
+    "northStar": "«Экран дежурного инженера» (NOC-статусборд)",
+    "overview": "Дашборд — стена мониторинга сетевого центра: матовый почти-чёрный грунт, плоские блоки, волосяные линии. Статус сервисов — главная типографика; телеметрия по краям. Глубина из контраста; движение — только ответ на действие.",
+    "keyCharacteristics": [
+      "Flat matte blocks, depth = contrast",
+      "LED language constant across themes",
+      "All numbers monospace tabular",
+      "Label tier 11px caps vs content tier",
+      "Accent rare: focus/drag/active only"
     ],
-    "dos": ["Держать акцент редким: active, drag, focus, статусные точки", "Задавать глубину светом и blur, а не толстыми тенями", "Использовать spring-easing cubic-bezier(0.2, 0.8, 0.2, 1.2) для hover/drag", "Уважать prefers-reduced-motion"],
-    "donts": ["Вводить новые хардкодные цвета — всё через токены", "Анимировать без причины: никакого idle-движения", "Использовать чёрные непрозрачные поверхности", "Фиксировать радиусы/цвета в компонентах — только var() токены"]
+    "rules": [
+      {
+        "name": "The Instrument Rule",
+        "body": "Любая цифра — monospace tabular; пропорциональные цифры в телеметрии — ошибка.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Board Rule",
+        "body": "Тени нет; глубина = контраст + 1px hairlines; LED-halo — свет прибора, не тень.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "LED-цвета константны во всех темах",
+      "mono tabular для любых цифр",
+      "reduced-motion отключает все переходы"
+    ],
+    "donts": [
+      "Тени/градиенты/стекло",
+      "Эмодзи как иконки интерфейса",
+      "Прятать метки виджетов в loading",
+      "Акцент >10% экрана"
+    ]
   }
 }
