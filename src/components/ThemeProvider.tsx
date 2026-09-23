@@ -2,9 +2,9 @@ import { useEffect, type ReactNode } from 'react'
 import { useStore } from '../store'
 import { THEMES, type ThemeId } from '../themes'
 
-/** Resolve a config theme id to a ThemeDef, falling back to liquid-glass. */
+/** Resolve a config theme id to a ThemeDef, falling back to noc-night. */
 export const resolveTheme = (id: string) =>
-  THEMES[id as ThemeId] ?? THEMES['liquid-glass']
+  THEMES[id as ThemeId] ?? THEMES['noc-night']
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
   const theme = useStore((s) => s.config.theme)

@@ -229,12 +229,14 @@ export default function EditGrid({ onEditCard }: { onEditCard?: (id: string) => 
    * mobile breakpoint — see useMobileLayout / themes.css mobile fallback.
    */
   const mobile = useMobileLayout()
+  const [patching, setPatching] = useState(false)
 
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragStart={() => setPatching(true)} onDragEnd={(e) => { setPatching(false); handleDragEnd(e) }} onDragCancel={() => setPatching(false)}>
+      {/* Signature «эскалация»: while one module is being patched, the board recedes */}
       <div
         ref={containerRef}
-        className="grid-view edit-grid"
+        className={`grid-view edit-grid${patching ? ' is-patching' : ''}`}
         style={{ position: 'relative', minHeight: height }}
       >
         {/* Entrance stagger lives on an outer static wrapper: a transform on

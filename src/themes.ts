@@ -1,123 +1,48 @@
-export type ThemeId = 'web20' | 'web30' | 'liquid-glass' | 'minimal'
-
+export type ThemeId = 'noc-night' | 'noc-day' | 'noc-alert' | 'noc-patrol'
 export interface ThemeDef {
-  id: ThemeId
-  name: string
+  id: ThemeId; name: string
   tokens: { dark: Record<string, string>; light: Record<string, string> }
   extraCss?: string
 }
 
-/**
- * Token contract — every theme defines both modes:
- * --bg, --bg-image-dim, --surface, --surface-border,
- * --text, --text-dim, --shadow, --radius-base
- */
+/* NOC-грамматика: глубина из контраста, не из теней. LED-цвета неизменны
+   во всех темах — статус не зависит от вкуса. */
+const LED = {
+  '--led-up': '#2ee6a8',
+  '--led-down': '#ff5c5c',
+  '--led-warn': '#ffb454',
+  '--hairline': '#23282e',
+  '--hairline-strong': '#3a414a',
+}
+
 export const THEMES: Record<ThemeId, ThemeDef> = {
-  web20: {
-    id: 'web20',
-    name: 'Web 2.0',
+  'noc-night': {
+    id: 'noc-night', name: 'Ночная смена',
     tokens: {
-      dark: {
-        '--bg': 'linear-gradient(160deg,#1b2735,#090a0f)',
-        '--bg-image-dim': 'rgba(9,10,15,.55)',
-        '--surface': 'linear-gradient(180deg,rgba(60,80,110,.9),rgba(30,40,60,.9))',
-        '--surface-border': 'rgba(255,255,255,.25)',
-        '--text': '#e8eef7',
-        '--text-dim': '#9fb2c8',
-        '--shadow': '0 4px 16px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3)',
-        '--radius-base': '12px',
-      },
-      light: {
-        '--bg': 'linear-gradient(160deg,#dfe9f3,#ffffff)',
-        '--bg-image-dim': 'rgba(255,255,255,.55)',
-        '--surface': 'linear-gradient(180deg,#ffffff,#e6eef7)',
-        '--surface-border': 'rgba(40,60,90,.25)',
-        '--text': '#1a2634',
-        '--text-dim': '#5b7188',
-        '--shadow': '0 3px 10px rgba(30,50,80,.2), inset 0 1px 0 #fff',
-        '--radius-base': '12px',
-      },
+      dark: { '--bg': '#0b0e11', '--surface': '#12151a', '--surface-border': '#23282e', '--text': '#e8ecef', '--text-dim': '#8b949e', '--shadow': 'none', '--radius-base': '6px', ...LED },
+      light: { '--bg': '#eef1f4', '--surface': '#ffffff', '--surface-border': '#d6dce2', '--text': '#171a1e', '--text-dim': '#5d6670', '--shadow': 'none', '--radius-base': '6px', ...LED },
     },
   },
-  web30: {
-    id: 'web30',
-    name: 'Web 3.0 Neon',
+  'noc-day': {
+    id: 'noc-day', name: 'Дневной дежурный',
     tokens: {
-      dark: {
-        '--bg': 'radial-gradient(1200px 800px at 20% -10%,#1a0b2e,#050208 60%)',
-        '--bg-image-dim': 'rgba(5,2,8,.55)',
-        '--surface': 'rgba(22,12,40,.72)',
-        '--surface-border': 'rgba(140,80,255,.45)',
-        '--text': '#f2eaff',
-        '--text-dim': '#a08cc8',
-        '--shadow': '0 0 24px rgba(124,92,255,.25)',
-        '--radius-base': '16px',
-      },
-      light: {
-        '--bg': 'radial-gradient(1200px 800px at 20% -10%,#e8dcff,#f8f6fc 60%)',
-        '--bg-image-dim': 'rgba(248,246,252,.55)',
-        '--surface': 'rgba(255,255,255,.75)',
-        '--surface-border': 'rgba(120,80,220,.35)',
-        '--text': '#241640',
-        '--text-dim': '#6b5a92',
-        '--shadow': '0 0 18px rgba(124,92,255,.15)',
-        '--radius-base': '16px',
-      },
+      dark: { '--bg': '#101418', '--surface': '#161b21', '--surface-border': '#2a3138', '--text': '#e6ebee', '--text-dim': '#818c97', '--shadow': 'none', '--radius-base': '2px', ...LED },
+      light: { '--bg': '#f6f7f8', '--surface': '#ffffff', '--surface-border': '#e2e6ea', '--text': '#101418', '--text-dim': '#6b747e', '--shadow': 'none', '--radius-base': '2px', ...LED },
     },
-    extraCss: `.card { box-shadow: 0 0 24px rgba(124,92,255,.25); }
-.card:hover { border-color: var(--accent); }`,
+    extraCss: `.card { border-width: 0; border-bottom: 1px solid var(--hairline); }`,
   },
-  'liquid-glass': {
-    id: 'liquid-glass',
-    name: 'Liquid Glass',
+  'noc-alert': {
+    id: 'noc-alert', name: 'Аварийный',
     tokens: {
-      dark: {
-        '--bg': 'linear-gradient(150deg,#0a0f1e,#101828 50%,#0a1020)',
-        '--bg-image-dim': 'rgba(10,15,30,.5)',
-        '--surface': 'rgba(255,255,255,.08)',
-        '--surface-border': 'rgba(255,255,255,.18)',
-        '--text': '#f5f7fb',
-        '--text-dim': '#9aa7bd',
-        '--shadow': '0 8px 32px rgba(0,0,0,.4)',
-        '--radius-base': '20px',
-      },
-      light: {
-        '--bg': 'linear-gradient(150deg,#cfe0f2,#eef4fb 50%,#e2ecf7)',
-        '--bg-image-dim': 'rgba(238,244,251,.5)',
-        '--surface': 'rgba(255,255,255,.45)',
-        '--surface-border': 'rgba(255,255,255,.6)',
-        '--text': '#182234',
-        '--text-dim': '#5a6b85',
-        '--shadow': '0 8px 32px rgba(40,60,90,.15)',
-        '--radius-base': '20px',
-      },
+      dark: { '--bg': '#160d0d', '--surface': '#1e1414', '--surface-border': '#3a2424', '--text': '#f2e9e9', '--text-dim': '#a08a8a', '--shadow': 'none', '--radius-base': '6px', ...LED, '--led-warn': '#ff8c3a' },
+      light: { '--bg': '#faf0ee', '--surface': '#ffffff', '--surface-border': '#e8d0cc', '--text': '#241515', '--text-dim': '#8a6f6b', '--shadow': 'none', '--radius-base': '6px', ...LED, '--led-warn': '#e07820' },
     },
-    extraCss: `.card { backdrop-filter: blur(var(--blur)) saturate(1.6); -webkit-backdrop-filter: blur(var(--blur)) saturate(1.6); }`,
   },
-  minimal: {
-    id: 'minimal',
-    name: 'Minimal',
+  'noc-patrol': {
+    id: 'noc-patrol', name: 'Полевой',
     tokens: {
-      dark: {
-        '--bg': '#111214',
-        '--bg-image-dim': 'rgba(17,18,20,.55)',
-        '--surface': '#1c1d21',
-        '--surface-border': '#2b2d33',
-        '--text': '#e6e6e9',
-        '--text-dim': '#8b8d95',
-        '--shadow': 'none',
-        '--radius-base': '8px',
-      },
-      light: {
-        '--bg': '#f6f6f7',
-        '--bg-image-dim': 'rgba(246,246,247,.55)',
-        '--surface': '#ffffff',
-        '--surface-border': '#e2e2e6',
-        '--text': '#17181b',
-        '--text-dim': '#77787f',
-        '--shadow': 'none',
-        '--radius-base': '8px',
-      },
+      dark: { '--bg': '#0a120e', '--surface': '#101a14', '--surface-border': '#20301f', '--text': '#e7efe9', '--text-dim': '#7f9488', '--shadow': 'none', '--radius-base': '2px', ...LED },
+      light: { '--bg': '#eef4f0', '--surface': '#ffffff', '--surface-border': '#d2ded6', '--text': '#141d17', '--text-dim': '#5d7066', '--shadow': 'none', '--radius-base': '2px', ...LED },
     },
   },
 }

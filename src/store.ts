@@ -29,7 +29,7 @@ const mutate = (set: any, get: () => State, fn: (c: DashboardConfig) => void) =>
   set({ config: next })
   scheduleSave(get)
 }
-export const defaultConfigClient = (): DashboardConfig => ({ version: 1, theme: { id: 'liquid-glass', mode: 'dark', accent: '#7c5cff', opacity: 0.6, blur: 16, background: null }, grid: { cols: 12, rowHeight: 80, gap: 12 }, items: [] })
+export const defaultConfigClient = (): DashboardConfig => ({ version: 1, theme: { id: 'noc-night', mode: 'dark', accent: '#38c8ff', opacity: 1, blur: 0, background: null }, grid: { cols: 12, rowHeight: 80, gap: 12 }, items: [] })
 export const useStore = create<State>((set, get) => ({
   config: defaultConfigClient(), status: 'loading', lastError: null,
   setConfig: (c) => set({ config: c, status: 'ready' }),

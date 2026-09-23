@@ -214,7 +214,7 @@ export default function CardModal({ itemId, onClose }: { itemId: string; onClose
                   disabled={uploading}
                   onClick={() => fileInput.current?.click()}
                 >
-                  {uploading ? 'Загрузка…' : '⬆ Своё изображение (svg/png)'}
+                  {uploading ? 'Загрузка…' : 'Своё изображение (svg/png)'}
                 </button>
                 {(icon || customIcon) && (
                   <button

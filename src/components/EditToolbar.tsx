@@ -46,13 +46,13 @@ export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOp
           ))}
           <span className="edit-toolbar-sep" aria-hidden="true" />
           <button type="button" className="edit-toolbar-btn" onClick={onOpenAppearance}>
-            🎨 Оформление
+            Оформление
           </button>
           <button type="button" className="edit-toolbar-btn" onClick={onOpenLayout}>
-            ▦ Сетка
+            Сетка
           </button>
           <button type="button" className="edit-toolbar-btn" onClick={onOpenData}>
-            💾 Данные
+            Данные
           </button>
         </div>
       )}
@@ -63,7 +63,7 @@ export default function EditToolbar({ editMode, onToggle, onOpenAppearance, onOp
         aria-pressed={editMode}
         title={editMode ? 'Leave edit mode' : 'Enter edit mode'}
       >
-        {editMode ? '✓ Готово' : '✏️ Редактировать'}
+        {editMode ? 'Готово' : 'Редактировать'}
       </button>
     </>
   )

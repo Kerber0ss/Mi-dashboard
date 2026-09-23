@@ -25,11 +25,11 @@ export const itemSchema = z.object({
 })
 
 const themeSchema = z.object({
-  id: z.string().default('liquid-glass'),
+  id: z.string().default('noc-night'),
   mode: z.enum(['light', 'dark']).default('dark'),
-  accent: z.string().regex(/^#[0-9a-fA-F]{6}$/).default('#7c5cff'),
-  opacity: z.number().min(0).max(1).default(0.6),
-  blur: z.number().min(0).max(40).default(16),
+  accent: z.string().regex(/^#[0-9a-fA-F]{6}$/).default('#38c8ff'),
+  opacity: z.number().min(0).max(1).default(1),
+  blur: z.number().min(0).max(40).default(0),
   background: z.string().nullable().default(null),
 })
 const gridSchema = z.object({ cols: z.number().int().min(4).max(24).default(12),
